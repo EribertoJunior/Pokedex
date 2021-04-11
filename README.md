@@ -1,4 +1,6 @@
-# Pokedex
+
+
+# Pokedex [![<circleci>](https://circleci.com/gh/EribertoJunior/Pokedex.svg?style=shield)](https://app.circleci.com/pipelines/github/EribertoJunior/Pokedex)
 
 ## _Objetivo do projeto_
 Praticar, desenvolver e registrar avanços em desenvolvimento android.

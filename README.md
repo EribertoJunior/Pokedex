@@ -18,3 +18,8 @@ Praticar, desenvolver e registrar avanços em desenvolvimento android.
 
 ## _Arquitetura utilizada: [MVVM](https://developer.android.com/jetpack/guide?hl=pt-br#recommended-app-arch)_
 ![](https://developer.android.com/topic/libraries/architecture/images/final-architecture.png?hl=pt-br)
+
+## _Endpoints_
+- URL Base: https://pokeapi.co/api/v2/
+- Lista de pokemons: https://pokeapi.co/api/v2/pokemon?limit=10&offset=0
+- Detalhes do pokemon: https://pokeapi.co/api/v2/pokemon/{idPokemon}/

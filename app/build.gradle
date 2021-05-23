@@ -47,7 +47,7 @@ dependencies {
 
     implementation 'org.koin:koin-android:2.2.2'
 
-    implementation "androidx.paging:paging-runtime:3.0.0"
+    implementation "androidx.paging:paging-runtime-ktx:3.0.0"
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 

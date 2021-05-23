@@ -49,6 +49,8 @@ dependencies {
 
     implem	entation "androidx.paging:paging-runtime:2.1.2"
 
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$room_version"
 

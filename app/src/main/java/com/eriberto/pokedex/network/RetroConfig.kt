@@ -20,9 +20,8 @@ class RetroConfig {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
-
-        fun getPokeServide() = getRetroInstance().create(PokeService::class.java)
-
     }
+
+    fun getPokeServide(): PokeService = getRetroInstance().create(PokeService::class.java)
 
 }

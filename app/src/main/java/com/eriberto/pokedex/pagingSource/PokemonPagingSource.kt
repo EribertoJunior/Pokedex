@@ -5,8 +5,11 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.eriberto.pokedex.model.PokemonData
 import com.eriberto.pokedex.network.PokeService
+import retrofit2.HttpException
+import java.io.IOException
 
 class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<Int, PokemonData>() {
+
     override fun getRefreshKey(state: PagingState<Int, PokemonData>): Int? {
         return state.anchorPosition
     }
@@ -25,8 +28,10 @@ class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<I
             }
 
             LoadResult.Page(data = response.results, prevKey = null , nextKey = nextOffsetNumber)
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             LoadResult.Error(e)
+        }catch (e: HttpException) {
+             LoadResult.Error(e)
         }
     }
 

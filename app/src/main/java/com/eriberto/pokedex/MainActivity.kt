@@ -1,6 +1,8 @@
 package com.eriberto.pokedex
 
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         val viewModel: MainActivityViewModel by viewModel()
         lifecycleScope.launchWhenCreated {
             viewModel.getListPokemon().collectLatest {
+                val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+                progressBar.visibility = View.GONE
                 myAdapter.submitData(it)
             }
         }

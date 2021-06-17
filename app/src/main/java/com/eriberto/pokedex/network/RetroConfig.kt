@@ -9,7 +9,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetroConfig(val context: Context) {
+class RetroConfig(private val context: Context) {
     private val cacheSize = (5 * 1024 * 1024).toLong()
     private val myCache = Cache(context.cacheDir, cacheSize)
 
@@ -19,7 +19,7 @@ class RetroConfig(val context: Context) {
         .cache(myCache)
         .addInterceptor { chain ->
             var request = chain.request()
-            request = if (hasNetwork(context)!!)
+            request = if (hasNetwork(context))
                 request.newBuilder().header("Cache-Control", "public, max-age=" + 5).build()
             else
                 request.newBuilder().header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7).build()
@@ -28,15 +28,7 @@ class RetroConfig(val context: Context) {
 
         .build()
 
-    private fun getRetroInstance(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    private fun hasNetwork(context: Context): Boolean? {
+    private fun hasNetwork(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val nw      = connectivityManager.activeNetwork ?: return false
@@ -49,6 +41,14 @@ class RetroConfig(val context: Context) {
         } else {
             return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
+    }
+
+    private fun getRetroInstance(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     fun getPokeServide(): PokeService = getRetroInstance().create(PokeService::class.java)

@@ -15,10 +15,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var myAdapter: MyRecyclerViewAdapter
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        progressBar = findViewById(R.id.progressBar)
 
         initRecyclerView()
         initViewModel()
@@ -28,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         val viewModel: MainActivityViewModel by viewModel()
         lifecycleScope.launchWhenCreated {
             viewModel.getListPokemon().collectLatest {
-                val progressBar = findViewById<ProgressBar>(R.id.progressBar)
                 progressBar.visibility = View.GONE
                 myAdapter.submitData(it)
             }

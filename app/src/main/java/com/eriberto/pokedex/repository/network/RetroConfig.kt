@@ -1,4 +1,4 @@
-package com.eriberto.pokedex.network
+package com.eriberto.pokedex.repository.network
 
 import android.content.Context
 import android.net.ConnectivityManager

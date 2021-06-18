@@ -1,6 +1,6 @@
-package com.eriberto.pokedex.network
+package com.eriberto.pokedex.repository.network
 
-import com.eriberto.pokedex.model.PokemonList
+import com.eriberto.pokedex.repository.model.PokemonList
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

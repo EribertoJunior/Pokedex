@@ -1,4 +1,4 @@
-package com.eriberto.pokedex.model
+package com.eriberto.pokedex.repository.model
 
 data class PokeDetalhe(
     val name: String?,

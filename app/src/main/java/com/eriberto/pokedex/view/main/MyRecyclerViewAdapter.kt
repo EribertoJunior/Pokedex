@@ -1,4 +1,4 @@
-package com.eriberto.pokedex
+package com.eriberto.pokedex.view.main
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +9,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.eriberto.pokedex.model.PokemonData
+import com.eriberto.pokedex.util.GlideResquestListener
+import com.eriberto.pokedex.R
+import com.eriberto.pokedex.repository.model.PokemonData
 import com.facebook.shimmer.ShimmerFrameLayout
 
 class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :

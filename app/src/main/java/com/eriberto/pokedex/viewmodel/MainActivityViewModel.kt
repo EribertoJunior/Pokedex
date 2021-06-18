@@ -1,4 +1,4 @@
-package com.eriberto.pokedex
+package com.eriberto.pokedex.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,8 +6,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.eriberto.pokedex.model.PokemonData
-import com.eriberto.pokedex.pagingSource.PokemonPagingSource
+import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
 import kotlinx.coroutines.flow.Flow
 
 class MainActivityViewModel(private val pokemonPagingSource: PokemonPagingSource) : ViewModel() {

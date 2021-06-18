@@ -1,4 +1,4 @@
-package com.eriberto.pokedex
+package com.eriberto.pokedex.view.main
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.eriberto.pokedex.model.PokemonData
+import com.eriberto.pokedex.viewmodel.MainActivityViewModel
+import com.eriberto.pokedex.R
+import com.eriberto.pokedex.repository.model.PokemonData
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
+
             myAdapter = MyRecyclerViewAdapter(object : MyRecyclerViewAdapter.OnClickListener {
                 override fun itemClick(item: PokemonData) {
                     Toast.makeText(this@MainActivity, item.name, Toast.LENGTH_LONG).show()

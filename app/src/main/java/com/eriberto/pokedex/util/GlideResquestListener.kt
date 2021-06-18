@@ -1,4 +1,4 @@
-package com.eriberto.pokedex
+package com.eriberto.pokedex.util
 
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.load.DataSource

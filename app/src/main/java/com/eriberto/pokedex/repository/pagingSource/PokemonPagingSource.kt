@@ -21,23 +21,19 @@ class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<I
             val nextOffset: Int = params.key ?: PRIMEIRO_DESLOCAMENTO_OFFSET
             val response = pokeService.getListPokemon(offset = nextOffset)
 
-            val nextOffsetNumber:Int? = getNextOffSet(response)
+            val nextOffsetNumber: Int? = getNextOffSet(response)
 
             loadResultSuccess(response, nextOffsetNumber)
         } catch (e: IOException) {
             loadResultError(e)
-        }catch (e: HttpException) {
+        } catch (e: HttpException) {
             loadResultError(e)
         }
     }
 
-    fun loadResultError(e: Exception): LoadResult.Error<Int, PokemonData> =
-        LoadResult.Error(e)
+    private fun loadResultError(e: Exception): LoadResult.Error<Int, PokemonData> = LoadResult.Error(e)
 
-    fun loadResultSuccess(
-        response: PokemonList,
-        nextOffsetNumber: Int?
-    ) = LoadResult.Page(
+    fun loadResultSuccess(response: PokemonList, nextOffsetNumber: Int?) = LoadResult.Page(
         data = response.results,
         prevKey = null,
         nextKey = nextOffsetNumber

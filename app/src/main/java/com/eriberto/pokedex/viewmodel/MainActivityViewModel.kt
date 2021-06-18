@@ -14,7 +14,12 @@ class MainActivityViewModel(private val pokemonPagingSource: PokemonPagingSource
 
     fun getListPokemon(): Flow<PagingData<PokemonData>> {
         return Pager(
-            config = PagingConfig(pageSize = 10, prefetchDistance = 50),
+            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = PREFETCH_SIZE),
             pagingSourceFactory = { pokemonPagingSource }).flow.cachedIn(viewModelScope)
+    }
+
+    companion object {
+        const val PAGE_SIZE = 10
+        const val PREFETCH_SIZE = 50
     }
 }

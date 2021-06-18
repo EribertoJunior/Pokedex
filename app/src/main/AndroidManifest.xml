@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.eriberto.pokedex">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,8 +12,10 @@
         android:roundIcon="@mipmap/ic_pokedex_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pokedex">
-        <activity android:name=".view.detalhe.DetalhePokemonActivity"></activity>
-        <activity android:name=".view.main.MainActivity">
+        <activity android:name=".view.detalhe.DetalhePokemonActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.main.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -18,6 +18,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,4 +27,8 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/poke_data_item"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+    <include layout="@layout/falha_no_carregamento"
+        android:visibility="gone"
+        android:id="@+id/tela_de_falha"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

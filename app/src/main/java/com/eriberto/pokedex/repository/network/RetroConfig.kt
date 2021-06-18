@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -14,18 +15,19 @@ class RetroConfig(private val context: Context) {
     private val myCache = Cache(context.cacheDir, cacheSize)
 
     private val baseUrl = "https://pokeapi.co/api/v2/"
+    var interceptador = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     private var client: OkHttpClient = OkHttpClient.Builder()
         .cache(myCache)
-        .addInterceptor { chain ->
+        /*.addInterceptor { chain ->
             var request = chain.request()
             request = if (hasNetwork(context))
                 request.newBuilder().header("Cache-Control", "public, max-age=" + 5).build()
             else
                 request.newBuilder().header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 7).build()
             chain.proceed(request)
-        }
-
+        }*/
+        .addInterceptor(interceptador)
         .build()
 
     private fun hasNetwork(context: Context): Boolean {

@@ -15,6 +15,7 @@ Praticar, desenvolver e registrar avanços em desenvolvimento android.
 - [CircleImageView](https://github.com/hdodenhof/CircleImageView)
 - [Shimmer Facebook](https://facebook.github.io/shimmer-android/)
 - [Mockk](https://mockk.io/ANDROID.html)
+- [Biblioteca de Suporte ao Design](https://developer.android.com/topic/libraries/support-library/packages#design)
 
 ## _Arquitetura utilizada: [MVVM](https://developer.android.com/jetpack/guide?hl=pt-br#recommended-app-arch)_
 ![](https://developer.android.com/topic/libraries/architecture/images/final-architecture.png?hl=pt-br)

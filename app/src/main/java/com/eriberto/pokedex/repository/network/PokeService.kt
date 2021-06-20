@@ -16,5 +16,5 @@ interface PokeService {
     ): PokemonList
 
     @GET("pokemon/{idPokemon}")
-    suspend fun getDetalhePokemon(@Path("idPokemon") idPokemon: Int) : Call<PokeDetalhe>
+    fun getDetalhePokemon(@Path("idPokemon") idPokemon: Int) : Call<PokeDetalhe>
 }

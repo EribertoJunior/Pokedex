@@ -1,6 +1,7 @@
 package com.eriberto.pokedex.repository.network
 
 import android.content.Context
+import com.eriberto.pokedex.BuildConfig
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +12,7 @@ class RetroConfig(context: Context) {
     private val cacheSize = (5 * 1024 * 1024).toLong()
     private val myCache = Cache(context.cacheDir, cacheSize)
 
-    private val baseUrl = "https://pokeapi.co/api/v2/"
+    private val baseUrl = BuildConfig.SERVER_URL
     var interceptador = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     private var client: OkHttpClient = OkHttpClient.Builder()

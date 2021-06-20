@@ -1,10 +1,10 @@
 package com.eriberto.pokedex.view.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -12,7 +12,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.view.detalhe.DetalhePokemonActivity
 import com.eriberto.pokedex.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
 
     private val viewModel: MainActivityViewModel by viewModel()
+
+    companion object{
+        val ID_POKEMON = "idPokemon"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,13 +62,20 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
 
             myAdapter = MyRecyclerViewAdapter(object : MyRecyclerViewAdapter.OnClickListener {
-                override fun itemClick(item: PokemonData) {
-                    Toast.makeText(this@MainActivity, item.name, Toast.LENGTH_LONG).show()
+                override fun itemClick(idPokemon: Int) {
+                    irParaTelaDeDetalhes(idPokemon)
                 }
             })
             adapter = myAdapter
         }
 
+    }
+
+    private fun irParaTelaDeDetalhes(idPokemon: Int) {
+        startActivity(
+            Intent(this, DetalhePokemonActivity::class.java)
+                .putExtra(ID_POKEMON, idPokemon)
+        )
     }
 
     private fun initObserverLoadState() {

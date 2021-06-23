@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         val ID_POKEMON = "idPokemon"
+        val NOME_POKEMON = "nomePokemon"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +63,8 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
 
             myAdapter = MyRecyclerViewAdapter(object : MyRecyclerViewAdapter.OnClickListener {
-                override fun itemClick(idPokemon: Int) {
-                    irParaTelaDeDetalhes(idPokemon)
+                override fun itemClick(idPokemon: Int, name: String) {
+                    irParaTelaDeDetalhes(idPokemon, name)
                 }
             })
             adapter = myAdapter
@@ -71,10 +72,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun irParaTelaDeDetalhes(idPokemon: Int) {
+    private fun irParaTelaDeDetalhes(idPokemon: Int, name: String) {
         startActivity(
             Intent(this, DetalhePokemonActivity::class.java)
                 .putExtra(ID_POKEMON, idPokemon)
+                .putExtra("nomePokemon", name)
         )
     }
 

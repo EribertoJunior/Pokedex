@@ -1,38 +1,102 @@
 package com.eriberto.pokedex.view.detalhe
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.eriberto.pokedex.R
+import com.eriberto.pokedex.repository.model.PokeDetalhe
 import com.eriberto.pokedex.repository.network.STATUS_RESULT
+import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.view.main.MainActivity.Companion.ID_POKEMON
+import com.eriberto.pokedex.view.main.MainActivity.Companion.NOME_POKEMON
 import com.eriberto.pokedex.viewmodel.DetalhePokemonViewModel
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetalhePokemonActivity : AppCompatActivity() {
 
-    val viewModel: DetalhePokemonViewModel by viewModel()
+    private val viewModel: DetalhePokemonViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalhe_pokemon)
 
-        if (intent.hasExtra(ID_POKEMON)) {
+
+        if (intent.hasExtra(ID_POKEMON) && intent.hasExtra(NOME_POKEMON)) {
             val idPokemon = intent.getIntExtra(ID_POKEMON, 0)
+            val nomePokemon = intent.getStringExtra(NOME_POKEMON)
+            showNomePokemon(nomePokemon)
+            showImagePokemon(idPokemon)
             initObserver(idPokemon)
         }
 
+        configuraBotaoFavoritar()
+
+    }
+
+    private fun configuraBotaoFavoritar() {
+        val fbFavoritar: FloatingActionButton = findViewById(R.id.fb_favoritar)
+        var boolean = true
+        fbFavoritar.setOnClickListener {
+            if(boolean){
+                fbFavoritar.apply {
+                    setImageResource(R.drawable.star)
+                    imageTintList = ContextCompat.getColorStateList(applicationContext, R.color.yellow)
+                }
+            }else{
+                fbFavoritar.apply {
+                    setImageResource(R.drawable.star_outline)
+                    imageTintList = ContextCompat.getColorStateList(applicationContext, R.color.black)
+                }
+            }
+            boolean = !boolean
+        }
+    }
+
+    private fun showImagePokemon(idPokemon: Int) {
+        val ivPokemon: ImageView = findViewById(R.id.ivPokemonDetalhe)
+        val shimerConteiner = findViewById<ShimmerFrameLayout>(R.id.shimerConteinerDetalhe)
+        Glide.with(ivPokemon)
+            .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$idPokemon.png")
+            .placeholder(R.drawable.pokeball_loading)
+            .error(R.drawable.pokeboll_error)
+            .listener(GlideResquestListener(shimerConteiner))
+            .into(ivPokemon)
+    }
+
+    private fun showNomePokemon(nomePokemon: String?) {
+        val collapsingToolbar: CollapsingToolbarLayout = findViewById(R.id.collapsing_toolbar)
+        collapsingToolbar.title = nomePokemon
     }
 
     private fun initObserver(idPokemon: Int) {
         viewModel.getDetalhesPokemon(idPokemon = idPokemon).observe(this, {
             when (it.statusResult) {
                 STATUS_RESULT.Success -> {
-                    Toast.makeText(this, it.pokeDetalhe?.name+" >>>", Toast.LENGTH_SHORT).show()
+                    exibirDetalhes(it.pokeDetalhe)
                 }
                 STATUS_RESULT.Error -> {
-                    Toast.makeText(this, it.errorMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.errorMessage, Toast.LENGTH_LONG).show()
                 }
             }
         })
+    }
+
+    private fun exibirDetalhes(pokeDetalhe: PokeDetalhe?) {
+        val tvHabilidade: TextView = findViewById(R.id.tvHabilidade)
+        val tvAltura: TextView = findViewById(R.id.tvAltura)
+        val tvPeso: TextView = findViewById(R.id.tvPeso)
+
+        pokeDetalhe?.let {
+            tvHabilidade.text = it.abilities[0].ability.name
+            tvAltura.text = (it.height / 10).toString().plus(" m")
+            tvPeso.text = (it.weight / 10).toString().plus(" kg")
+        }
+
     }
 }

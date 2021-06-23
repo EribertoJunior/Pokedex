@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="blue_A200">#448AFF</color>
+
+    <color name="colorPrincipal">#FF6200EE</color>
+    <color name="colorSecundary">#FF3700B3</color>
+    <color name="colorBackground">#000000</color>
+
+    <color name="grey_900">#212121</color>
 </resources>

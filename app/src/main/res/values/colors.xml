@@ -13,4 +13,11 @@
     <color name="red_700">#d32f2f</color>
     <color name="red_900">#b71c1c</color>
     <color name="blue_A200">#448AFF</color>
+
+    <color name="colorPrincipal">#F22C32</color>
+    <color name="colorSecundary">#A51E22</color>
+    <color name="colorBackground">#FFFFFFFF</color>
+
+    <color name="grey_900">#212121</color>
+    <color name="yellow">#ffff00</color>
 </resources>

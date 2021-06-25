@@ -3,7 +3,7 @@
     <string name="detalhes">Detalhes</string>
     <string name="mensagem_de_falha_na_request">Falha na busca do catalogo, quer tentar de novo?</string>
     <string name="imagem_de_snorlax_e_pikachu_dormindo">Imagem de Snorlax e Pikachu dormindo</string>
-    <string name="sim_tentar_novamente">Sim! Tentar novamente</string>
+    <string name="sim_tentar_novamente">Tentar novamente!</string>
     <string name="favoritar">Favoritar</string>
     <string name="altura">Altura</string>
     <string name="habilidade">Habilidade</string>

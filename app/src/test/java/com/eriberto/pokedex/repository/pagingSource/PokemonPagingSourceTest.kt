@@ -1,52 +1,49 @@
 package com.eriberto.pokedex.repository.pagingSource
 
 import androidx.paging.PagingSource
-import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.repository.model.PokemonList
 import com.eriberto.pokedex.repository.network.PokeService
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
-import org.junit.Ignore
 import org.junit.Test
+import java.io.IOException
 
 class PokemonPagingSourceTest {
 
     private val service = mockk<PokeService>()
+    private val loadParamsMock = mockk<PagingSource.LoadParams<Int>>()
+    private val responseMock = mockk<PokemonList>()
 
-    private val mockedPokemonList = PokemonList(next = null, results = listOf(PokemonData("", "")))
-
-
-    @Ignore
     @Test
-    fun `deve retornar lista de itens quando busca for bem sucedida`() {
+    fun `deve notificar sucesso quando busca for bem sucedida`() {
 
-        val spyPokemonPagingSource = spyk(PokemonPagingSource(service))
+        val pokemonPagingSource = spyk(PokemonPagingSource(service))
 
-        coEvery { service.getListPokemon(offset = 0) } returns mockedPokemonList
+        coEvery { loadParamsMock.key } returns null
+        coEvery { service.getListPokemon(offset = 0) } returns responseMock
 
-        coEvery { spyPokemonPagingSource.getNextOffSet(mockedPokemonList) } returns null
-
-        coEvery { spyPokemonPagingSource.load(any()) } returns PagingSource.LoadResult.Page(
-            data = mockedPokemonList.results,
-            prevKey = null,
-            nextKey = null
-        )
-
-        runBlocking {
-            val params: PagingSource.LoadParams<Int> = mockk()
-
-            spyPokemonPagingSource.load(params)
-
+        responseMock.apply {
+            every { next } returns null
+            every { results } returns listOf()
         }
-//edla
-        //parallax
-        coVerify { spyPokemonPagingSource.loadResultSuccess(any(), any()) }
+
+        runBlocking { pokemonPagingSource.load(loadParamsMock) }
+
+        coVerify { pokemonPagingSource.loadResultSuccess(any(), any()) }
 
     }
 
     @Test
-    fun `deve retornar um excepition quando a busca nao for bem sucedida`() {
+    fun `deve notificar um throwable quando a busca nao for bem sucedida`() {
 
+        val pokemonPagingSource = spyk(PokemonPagingSource(service))
+
+        coEvery { loadParamsMock.key } returns 0
+        coEvery { service.getListPokemon(offset = 0) } throws IOException()
+
+        runBlocking { pokemonPagingSource.load(loadParamsMock) }
+
+        coVerify { pokemonPagingSource.loadResultError(any()) }
     }
 
 }

@@ -1,7 +1,9 @@
 package com.eriberto.pokedex.view.detalhe
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -62,7 +64,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
         val ivPokemon: ImageView = findViewById(R.id.ivPokemonDetalhe)
         val shimerConteiner = findViewById<ShimmerFrameLayout>(R.id.shimerConteinerDetalhe)
         Glide.with(ivPokemon)
-            .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$idPokemon.png")
+            .load(getString(R.string.url_imagem, idPokemon))
             .placeholder(R.drawable.pokeball_loading)
             .error(R.drawable.pokeboll_error)
             .listener(GlideResquestListener(shimerConteiner))
@@ -75,22 +77,35 @@ class DetalhePokemonActivity : AppCompatActivity() {
     }
 
     private fun initObserver(idPokemon: Int) {
-        viewModel.getDetalhesPokemon(idPokemon = idPokemon).observe(this, {
+        viewModel.getDetalhesPokemon(idPokemon)
+        viewModel.detalhePokemonData.observe(this, {
             when (it.statusResult) {
                 STATUS_RESULT.Success -> {
                     exibirDetalhes(it.pokeDetalhe)
                 }
                 STATUS_RESULT.Error -> {
-                    Toast.makeText(this, it.errorMessage, Toast.LENGTH_LONG).show()
+                    exibirMensagemDeErro(it)
                 }
             }
         })
+    }
+
+    private fun exibirMensagemDeErro(it: DetalhePokemonViewModel.PokeDetalheData) {
+        esconderProgressBar()
+        Toast.makeText(this, it.errorMessage, Toast.LENGTH_LONG).show()
+    }
+
+    private fun esconderProgressBar() {
+        val progressBarTelaDetalhe: ProgressBar = findViewById(R.id.progressBarTelaDetalhe)
+        progressBarTelaDetalhe.visibility = View.GONE
     }
 
     private fun exibirDetalhes(pokeDetalhe: PokeDetalhe?) {
         val tvHabilidade: TextView = findViewById(R.id.tvHabilidade)
         val tvAltura: TextView = findViewById(R.id.tvAltura)
         val tvPeso: TextView = findViewById(R.id.tvPeso)
+
+        esconderProgressBar()
 
         pokeDetalhe?.let {
             tvHabilidade.text = it.abilities[0].ability.name

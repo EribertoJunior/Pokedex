@@ -27,9 +27,9 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
         return MeuViewHolder(inflate)
     }
 
-    private fun getIdPokemon(urlPokemon: String): String {
+    private fun getIdPokemon(urlPokemon: String): Int {
         val regex = "/\\d{1,5}".toRegex()
-        return regex.find(urlPokemon)?.value?.replace("/","")?: ""
+        return regex.find(urlPokemon)?.value?.replace("/","")?.toInt() ?: 0
     }
 
     inner class MeuViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -41,10 +41,10 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
         private val shimerConteiner = view.findViewById<ShimmerFrameLayout>(R.id.shimerConteiner)
         fun bind(item: PokemonData) {
             tvNomePokemon.text = item.name
-            tvDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url).toInt(), item.name) }
+            tvDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item.name) }
             shimerConteiner.startShimmer()
             Glide.with(ivPokemon)
-                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${getIdPokemon(item.url)}.png")
+                .load(ivPokemon.context.getString(R.string.url_imagem, getIdPokemon(item.url)))
                 .placeholder(R.drawable.pokeball_loading)
                 .error(R.drawable.pokeboll_error)
                 .listener(GlideResquestListener(shimerConteiner))

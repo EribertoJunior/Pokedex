@@ -13,25 +13,36 @@ import kotlinx.coroutines.launch
 
 class DetalhePokemonViewModel(private val detalhePokemonRepo: DetalhePokemonRepo) : ViewModel() {
 
-    private val detalhePokemonData = MutableLiveData<PokeDetalheData>()
+    private val _detalhePokemonData = MutableLiveData<PokeDetalheData>()
 
-    fun getDetalhesPokemon(idPokemon: Int): LiveData<PokeDetalheData> {
+    val detalhePokemonData: LiveData<PokeDetalheData> = _detalhePokemonData
+
+    fun getDetalhesPokemon(idPokemon: Int) {
 
         viewModelScope.launch(Dispatchers.IO) {
             detalhePokemonRepo.getDetalhePokemon(
                 idPokemon = idPokemon,
                 result = object : Result<PokeDetalhe> {
                     override fun success(data: PokeDetalhe) {
-                        detalhePokemonData.postValue(PokeDetalheData(pokeDetalhe = data, statusResult = STATUS_RESULT.Success))
+                        _detalhePokemonData.postValue(
+                            PokeDetalheData(
+                                pokeDetalhe = data,
+                                statusResult = STATUS_RESULT.Success
+                            )
+                        )
                     }
 
                     override fun error(errorMessage: String) {
-                        detalhePokemonData.postValue(PokeDetalheData(errorMessage = errorMessage, statusResult = STATUS_RESULT.Error))
+                        _detalhePokemonData.postValue(
+                            PokeDetalheData(
+                                errorMessage = errorMessage,
+                                statusResult = STATUS_RESULT.Error
+                            )
+                        )
                     }
                 })
         }
 
-        return detalhePokemonData
     }
 
     inner class PokeDetalheData(

@@ -1,6 +1,6 @@
 
 
-# Pokedex [![ActionsCI](https://github.com/EribertoJunior/Pokedex/actions/workflows/config.yml/badge.svg)](https://github.com/EribertoJunior/Pokedex/actions/workflows/config.yml)
+# Pokedex ![ActionsCI](https://github.com/EribertoJunior/Pokedex/actions/workflows/config.yml/badge.svg)
 
 ## _Objetivo do projeto_
 Praticar, desenvolver e registrar avanços em desenvolvimento android.

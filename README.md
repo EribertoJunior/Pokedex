@@ -1,6 +1,6 @@
 
 
-# Pokedex [![<ci>]()
+# Pokedex
 
 ## _Objetivo do projeto_
 Praticar, desenvolver e registrar avanços em desenvolvimento android.

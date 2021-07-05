@@ -10,8 +10,12 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+const val PROPERTY_BASE_URL = "PROPERTY_BASE_URL"
+
 val appModule = module {
-    single { RetroConfig(androidContext()).getPokeServide() }
+    single {
+        val baseUrl = getProperty(PROPERTY_BASE_URL)
+        RetroConfig(baseUrl = baseUrl,context = androidContext()).getPokeServide() }
 
     factory { PokemonPagingSource(pokeService = get()) }
     factory<DetalhePokemonRepo> { DetalhePokemonRepoImp(pokeService = get()) }

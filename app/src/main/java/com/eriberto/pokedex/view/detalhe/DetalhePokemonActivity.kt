@@ -101,6 +101,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
     }
 
     private fun exibirDetalhes(pokeDetalhe: PokeDetalhe?) {
+        val tvTitleAbilities: TextView = findViewById(R.id.tvTitleAbilities)
         val tvHabilidade: TextView = findViewById(R.id.tvHabilidade)
         val tvAltura: TextView = findViewById(R.id.tvAltura)
         val tvPeso: TextView = findViewById(R.id.tvPeso)
@@ -108,7 +109,16 @@ class DetalhePokemonActivity : AppCompatActivity() {
         esconderProgressBar()
 
         pokeDetalhe?.let {
-            tvHabilidade.text = it.abilities[0].ability.name
+            var abilitiesNames = ""
+            val tamanhoDaLista = it.abilities.size - 1
+            it.abilities.forEachIndexed { index, abilitySlot ->
+                abilitiesNames += abilitySlot.ability.name
+                if (index < tamanhoDaLista){
+                    abilitiesNames += "\n"
+                }
+            }
+
+            tvHabilidade.text = abilitiesNames
             tvAltura.text = (it.height / 10).toString().plus(" m")
             tvPeso.text = (it.weight / 10).toString().plus(" kg")
         }

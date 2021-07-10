@@ -9,14 +9,3 @@ data class PokeDetalhe(
     val game_indices: List<Game>
 )
 
-data class TypeSlot(val slot: Int, val type: Type)
-
-data class Type(val name: String?)
-
-data class AbilitySlot(val ability: Ability)
-
-data class Ability(val name: String?)
-
-data class Game(val game_index: Int, val version: Versao)
-
-data class Versao(val name: String?)

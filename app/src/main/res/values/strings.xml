@@ -11,5 +11,11 @@
     <string name="tipo">Tipo</string>
     <string name="imagem_do_pokemon">Imagem do pokemon</string>
 
+    <plurals name="habilidades">
+        <item quantity="one">Habilidade</item>
+        <item quantity="other">Habilidades</item>
+    </plurals>
+
     <string name="url_imagem">https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%1$d.png</string>
+    <string name="imagem_tipo_do_pokemon">Imagem tipo do pokémon</string>
 </resources>

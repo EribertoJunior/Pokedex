@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModel()
 
     companion object{
-        val ID_POKEMON = "idPokemon"
-        val NOME_POKEMON = "nomePokemon"
+        const val ID_POKEMON = "idPokemon"
+        const val NOME_POKEMON = "nomePokemon"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     private fun initClickDoBotaoTentarNovamente() {
         val btTentarNovamente : Button= findViewById(R.id.btTentarNovamente)
         btTentarNovamente.setOnClickListener {
-            viewModel.getListPokemon()
+            initViewModel()
         }
     }
 

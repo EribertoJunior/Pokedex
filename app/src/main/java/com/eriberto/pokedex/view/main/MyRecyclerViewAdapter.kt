@@ -36,7 +36,6 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
         private val tvNomePokemon = view.findViewById<TextView>(R.id.tvNomePokemon)
         private val tvDetalhesPokemon = view.findViewById<TextView>(R.id.tvDetalhesPokemon)
         private val ivPokemon = view.findViewById<ImageView>(R.id.ivPokemon)
-        private val ivEstrela = view.findViewById<ImageView>(R.id.ivEstrela)
 
         private val shimerConteiner = view.findViewById<ShimmerFrameLayout>(R.id.shimerConteiner)
         fun bind(item: PokemonData) {

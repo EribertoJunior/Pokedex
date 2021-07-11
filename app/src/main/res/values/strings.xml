@@ -3,7 +3,7 @@
     <string name="detalhes">Detalhes</string>
     <string name="mensagem_de_falha_na_request">Falha na busca do catalogo, quer tentar de novo?</string>
     <string name="imagem_de_snorlax_e_pikachu_dormindo">Imagem de Snorlax e Pikachu dormindo</string>
-    <string name="sim_tentar_novamente">Tentar novamente!</string>
+    <string name="sim_tentar_novamente">Tentar novamente</string>
     <string name="favoritar">Favoritar</string>
     <string name="altura">Altura</string>
     <string name="habilidade">Habilidade</string>
@@ -18,4 +18,5 @@
 
     <string name="url_imagem">https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%1$d.png</string>
     <string name="imagem_tipo_do_pokemon">Imagem tipo do pokémon</string>
+    <string name="imagem_simbolo_de_favorito">imagem simbolo de favorito</string>
 </resources>

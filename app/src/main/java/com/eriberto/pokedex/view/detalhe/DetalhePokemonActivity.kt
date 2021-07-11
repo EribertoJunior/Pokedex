@@ -8,9 +8,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eriberto.pokedex.R
 import com.eriberto.pokedex.repository.model.PokeDetalhe
+import com.eriberto.pokedex.repository.model.TypeSlot
 import com.eriberto.pokedex.repository.network.STATUS_RESULT
 import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.view.main.MainActivity.Companion.ID_POKEMON
@@ -117,11 +119,20 @@ class DetalhePokemonActivity : AppCompatActivity() {
                     abilitiesNames += "\n"
                 }
             }
+            configuraRecyclerView(it.types)
 
             tvHabilidade.text = abilitiesNames
             tvAltura.text = (it.height / 10).toString().plus(" m")
             tvPeso.text = (it.weight / 10).toString().plus(" kg")
+            tvTitleAbilities.text = resources.getQuantityText(R.plurals.habilidades, it.abilities.size)
         }
 
+    }
+
+    private fun configuraRecyclerView(types: List<TypeSlot>) {
+        val recyclerViewTipoPokemon: RecyclerView = findViewById(R.id.recyclerViewTipoPokemon)
+        recyclerViewTipoPokemon.apply {
+            adapter = TipoPokemonAdapter(types)
+        }
     }
 }

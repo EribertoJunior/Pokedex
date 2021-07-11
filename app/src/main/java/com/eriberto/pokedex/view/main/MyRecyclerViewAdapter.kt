@@ -45,8 +45,8 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
             shimerConteiner.startShimmer()
             Glide.with(ivPokemon)
                 .load(ivPokemon.context.getString(R.string.url_imagem, getIdPokemon(item.url)))
-                .placeholder(R.drawable.pokeball_loading)
-                .error(R.drawable.pokeboll_error)
+                .placeholder(R.mipmap.pokeball_loading)
+                .error(R.mipmap.pokeboll_error)
                 .listener(GlideResquestListener(shimerConteiner))
                 .into(ivPokemon)
         }

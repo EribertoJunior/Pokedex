@@ -4,7 +4,9 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.eriberto.pokedex.repository.network.OkHttpProvider
+import com.eriberto.pokedex.util.FileReader.readStringFromFile
 import com.jakewharton.espresso.OkHttp3IdlingResource
+import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
@@ -34,5 +36,13 @@ class MainActivityTest {
     @After
     fun tearDown() {
         mockWebServer.shutdown()
+    }
+
+    private fun mockResponse(asset: String, responseCode: Int = 200) {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(responseCode)
+                .setBody(readStringFromFile(asset))
+        )
     }
 }

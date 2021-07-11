@@ -65,8 +65,8 @@ class DetalhePokemonActivity : AppCompatActivity() {
         val shimerConteiner = findViewById<ShimmerFrameLayout>(R.id.shimerConteinerDetalhe)
         Glide.with(ivPokemon)
             .load(getString(R.string.url_imagem, idPokemon))
-            .placeholder(R.drawable.pokeball_loading)
-            .error(R.drawable.pokeboll_error)
+            .placeholder(R.mipmap.pokeball_loading)
+            .error(R.mipmap.pokeboll_error)
             .listener(GlideResquestListener(shimerConteiner))
             .into(ivPokemon)
     }

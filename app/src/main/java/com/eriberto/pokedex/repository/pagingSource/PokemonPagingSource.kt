@@ -28,6 +28,8 @@ class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<I
             loadResultError(e)
         } catch (e: HttpException) {
             loadResultError(e)
+        } catch (e: Exception) {
+            loadResultError(e)
         }
     }
 

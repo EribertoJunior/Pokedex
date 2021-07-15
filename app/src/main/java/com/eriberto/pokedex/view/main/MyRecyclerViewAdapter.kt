@@ -29,7 +29,7 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
     }
 
     private fun getIdPokemon(urlPokemon: String): Int {
-        val regex = "/\\d{1,5}".toRegex()
+        val regex = "/\\d+".toRegex()
         return regex.find(urlPokemon)?.value?.replace("/","")?.toInt() ?: 0
     }
 

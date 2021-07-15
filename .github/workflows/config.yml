@@ -1,5 +1,5 @@
 # Workflow name
-name: Build and unit test
+name: Run UI and Unit tests
 on:
   # When it will be triggered
   # And in which branch
@@ -91,10 +91,10 @@ jobs:
         run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
 
       - name: Run Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run 
+        run: gcloud firebase test android run
           --type instrumentation
           --test app-debug-androidTest/app-debug-androidTest.apk
-          --app app-debug/app-debug.apk 
+          --app app-debug/app-debug.apk
           --device model=Pixel2,version=29,locale=pt_BR,orientation=portrait
           --use-orchestrator
           --environment-variables clearPackageData=true

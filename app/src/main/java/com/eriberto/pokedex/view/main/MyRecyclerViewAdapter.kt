@@ -13,6 +13,7 @@ import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.R
 import com.eriberto.pokedex.repository.model.PokemonData
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.android.material.button.MaterialButton
 
 class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
     PagingDataAdapter<PokemonData, MyRecyclerViewAdapter.MeuViewHolder>(DiffUtilCallBack()) {
@@ -34,13 +35,13 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
 
     inner class MeuViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val tvNomePokemon = view.findViewById<TextView>(R.id.tvNomePokemon)
-        private val tvDetalhesPokemon = view.findViewById<TextView>(R.id.tvDetalhesPokemon)
+        private val btDetalhesPokemon = view.findViewById<MaterialButton>(R.id.btDetalhesPokemon)
         private val ivPokemon = view.findViewById<ImageView>(R.id.ivPokemon)
 
         private val shimerConteiner = view.findViewById<ShimmerFrameLayout>(R.id.shimerConteiner)
         fun bind(item: PokemonData) {
             tvNomePokemon.text = item.name
-            tvDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item.name) }
+            btDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item.name) }
             shimerConteiner.startShimmer()
             Glide.with(ivPokemon)
                 .load(ivPokemon.context.getString(R.string.url_imagem, getIdPokemon(item.url)))

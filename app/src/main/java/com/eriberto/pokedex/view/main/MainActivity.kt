@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView = findViewById(R.id.recyclerViewListaPokemon)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)

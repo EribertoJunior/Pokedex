@@ -2,18 +2,20 @@ package com.eriberto.pokedex.view.main
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.eriberto.pokedex.R
 import com.eriberto.pokedex.repository.network.OkHttpProvider
-import com.eriberto.pokedex.util.FileReader.readStringFromFile
+import com.eriberto.pokedex.util.MockWebServerUtil.getDispatchResponse
+import com.eriberto.pokedex.util.MockWebServerUtil.getMockResponse
+import com.eriberto.pokedex.util.ViewMatcher.aparecePokemonNaPosicao
 import com.jakewharton.espresso.OkHttp3IdlingResource
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -31,7 +33,6 @@ class MainActivityTest {
     @Before
     fun setUp() {
         mockWebServer = MockWebServer()
-        mockWebServer.dispatcher = getDispatchResponse()
         mockWebServer.start(8080)
 
         IdlingRegistry.getInstance().register(
@@ -43,8 +44,47 @@ class MainActivityTest {
     }
 
     @Test
-    fun deve_ExibirDezPokemons_QuandoReceberDezPokemonsDaAPI() {
-        onView(withText("bulbasaur2")).check(ViewAssertions.matches(isDisplayed()))
+    fun deve_ExibirCinquentaPokemons_QuandoReceberCinquentaPokemonsDaAPI() {
+        configuraRetornoPaginadoAPI()
+        onView(withId(R.id.recyclerViewListaPokemon))
+            .perform(scrollToPosition<MyRecyclerViewAdapter.MeuViewHolder>(49))
+            .check(matches(aparecePokemonNaPosicao(position = 49, namePokemon = "diglett")))
+    }
+
+    @Test
+    fun deve_ExibirTelaDeFalha_QuandoABuscaFalhar() {
+        mockWebServer.enqueue(getMockResponse(responseCode = 400))
+        onView(withId(R.id.imageViewPokemonFalha))
+            .check(matches(isDisplayed()))
+
+        onView(
+            allOf(
+                withText("Falha na busca do catalogo, quer tentar de novo?"),
+                withId(R.id.textViewMensagemDeFalha)
+            )
+        )
+            .check(matches(isDisplayed()))
+
+        onView(
+            allOf(
+                withText("Tentar novamente"),
+                withId(R.id.botaoTentarNovamente)
+            )
+        )
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun deve_SerPossivelClicarNoBotaoTentarNovamente_QuandoABuscaFalhar() {
+        mockWebServer.enqueue(getMockResponse(responseCode = 400))
+
+        onView(
+            allOf(
+                withText("Tentar novamente"),
+                withId(R.id.botaoTentarNovamente),
+                isDisplayed()
+            )
+        ).check(matches(isClickable()))
     }
 
     @After
@@ -52,51 +92,7 @@ class MainActivityTest {
         mockWebServer.shutdown()
     }
 
-    private fun getDispatchResponse(): Dispatcher {
-        return object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                return when (request.path) {
-                    "/pokemon?limit=10&offset=0" -> {
-                        getMockResponse(assets = PAG_1)
-                    }
-                    "/pokemon?limit=10&offset=10" -> {
-                        getMockResponse(assets = PAG_2)
-                    }
-                    "/pokemon?limit=10&offset=20" -> {
-                        getMockResponse(assets = PAG_3)
-                    }
-                    "/pokemon?limit=10&offset=30" -> {
-                        getMockResponse(assets = PAG_4)
-                    }
-                    "/pokemon?limit=10&offset=40" -> {
-                        getMockResponse(assets = PAG_5)
-                    }
-                    "/pokemon?limit=10&offset=50" -> {
-                        getMockResponse(assets = PAG_6)
-                    }
-                    else -> {
-                        getMockResponse(responseCode = 400)
-                    }
-                }
-            }
-
-            private fun getMockResponse(
-                assets: String = "{}",
-                responseCode: Int = 200
-            ): MockResponse {
-                return MockResponse()
-                    .setResponseCode(responseCode)
-                    .setBody(readStringFromFile(assets))
-            }
-        }
-    }
-
-    companion object {
-        const val PAG_1: String = "list_pag_1_success_response.json"
-        const val PAG_2: String = "list_pag_2_success_response.json"
-        const val PAG_3: String = "list_pag_3_success_response.json"
-        const val PAG_4: String = "list_pag_4_success_response.json"
-        const val PAG_5: String = "list_pag_5_success_response.json"
-        const val PAG_6: String = "list_pag_6_success_response.json"
+    private fun configuraRetornoPaginadoAPI() {
+        mockWebServer.dispatcher = getDispatchResponse()
     }
 }

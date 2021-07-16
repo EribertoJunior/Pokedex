@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initClickDoBotaoTentarNovamente() {
-        val btTentarNovamente : Button= findViewById(R.id.btTentarNovamente)
+        val btTentarNovamente : Button= findViewById(R.id.botaoTentarNovamente)
         btTentarNovamente.setOnClickListener {
             initViewModel()
         }
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initObserverLoadState() {
-        progressBar = findViewById(R.id.progressBar)
+        progressBar = findViewById(R.id.progressBarListaPokemon)
         val telaDeFalha: View = findViewById(R.id.tela_de_falha)
         lifecycleScope.launch {
             myAdapter.loadStateFlow.collectLatest { loadState ->

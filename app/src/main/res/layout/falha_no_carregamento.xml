@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageViewPokemonFalha"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:contentDescription="@string/imagem_de_snorlax_e_pikachu_dormindo"
@@ -18,7 +18,7 @@
         app:srcCompat="@mipmap/falha_no_carregamento" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewMensagemDeFalha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mensagem_de_falha_na_request"
@@ -27,16 +27,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewPokemonFalha"
         app:layout_constraintVertical_bias="0.3" />
 
     <Button
-        android:id="@+id/btTentarNovamente"
+        android:id="@+id/botaoTentarNovamente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sim_tentar_novamente"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewMensagemDeFalha" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,9 @@
 package com.eriberto.pokedex.util
 
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
+import com.eriberto.pokedex.repository.network.OkHttpProvider
+import com.jakewharton.espresso.OkHttp3IdlingResource
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
@@ -43,6 +46,9 @@ object MockWebServerUtil {
                     "/pokemon?limit=10&offset=50" -> {
                         getMockResponse(assets = PAG_6)
                     }
+                    "/pokemon/1" -> {
+                        getMockResponse(assets = DETALHES)
+                    }
                     else -> {
                         getMockResponse(responseCode = 400)
                     }
@@ -68,5 +74,7 @@ object MockWebServerUtil {
     private const val PAG_4: String = "list_pag_4_success_response.json"
     private const val PAG_5: String = "list_pag_5_success_response.json"
     private const val PAG_6: String = "list_pag_6_success_response.json"
+    private const val DETALHES: String = "details_bulbasaur_success_response.json"
+
 
 }

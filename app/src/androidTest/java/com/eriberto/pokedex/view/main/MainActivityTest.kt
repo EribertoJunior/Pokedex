@@ -1,19 +1,16 @@
 package com.eriberto.pokedex.view.main
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.network.OkHttpProvider
 import com.eriberto.pokedex.util.MockWebServerUtil.getDispatchResponse
 import com.eriberto.pokedex.util.MockWebServerUtil.getMockResponse
+import com.eriberto.pokedex.util.MockWebServerUtil.registraOkHttp
 import com.eriberto.pokedex.util.ViewMatcher.aparecePokemonNaPosicao
-import com.jakewharton.espresso.OkHttp3IdlingResource
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.Matchers.allOf
 import org.junit.After
@@ -35,12 +32,7 @@ class MainActivityTest {
         mockWebServer = MockWebServer()
         mockWebServer.start(8080)
 
-        IdlingRegistry.getInstance().register(
-            OkHttp3IdlingResource.create(
-                "okhttp",
-                OkHttpProvider.getOkHttpClient()
-            )
-        )
+        registraOkHttp()
     }
 
     @Test

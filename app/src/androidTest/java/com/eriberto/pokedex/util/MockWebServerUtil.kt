@@ -12,6 +12,15 @@ object MockWebServerUtil {
         return assets.open(fileName).reader().readText()
     }
 
+    fun registraOkHttp() {
+        IdlingRegistry.getInstance().register(
+            OkHttp3IdlingResource.create(
+                "okhttp",
+                OkHttpProvider.getOkHttpClient()
+            )
+        )
+    }
+
     fun getDispatchResponse(): Dispatcher {
         return object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {

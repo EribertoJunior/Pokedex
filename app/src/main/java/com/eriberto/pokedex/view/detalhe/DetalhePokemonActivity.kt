@@ -74,7 +74,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
     }
 
     private fun showNomePokemon(nomePokemon: String?) {
-        val collapsingToolbar: CollapsingToolbarLayout = findViewById(R.id.collapsing_toolbar)
+        val collapsingToolbar: CollapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_detalhes_pokemon)
         collapsingToolbar.title = nomePokemon
     }
 

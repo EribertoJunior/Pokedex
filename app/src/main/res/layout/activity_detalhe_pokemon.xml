@@ -15,14 +15,14 @@
         android:theme="@style/Theme.Pokedex">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+            android:id="@+id/collapsing_toolbar_detalhes_pokemon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/ctg_bg"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:title="@string/app_name">
+            tools:title="@string/app_name">
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimerConteinerDetalhe"

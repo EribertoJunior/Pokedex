@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(
             Intent(this, DetalhePokemonActivity::class.java)
                 .putExtra(ID_POKEMON, idPokemon)
-                .putExtra("nomePokemon", name)
+                .putExtra(NOME_POKEMON, name)
         )
     }
 

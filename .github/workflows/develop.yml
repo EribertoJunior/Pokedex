@@ -1,5 +1,5 @@
 # Workflow name
-name: Run UI and Unit tests
+name: Run Unit tests
 on:
   # When it will be triggered
   # And in which branch

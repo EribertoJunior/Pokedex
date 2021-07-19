@@ -5,8 +5,7 @@ on:
   # And in which branch
   pull_request:
   push:
-    branches:
-      - develop
+    branches: [develop]
 # Where will they run
 jobs:
   test:

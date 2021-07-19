@@ -4,9 +4,10 @@ on:
   # When it will be triggered
   # And in which branch
   pull_request:
-  push:
     branches:
       - main
+  push:
+
 # Where will they run
 jobs:
   test:

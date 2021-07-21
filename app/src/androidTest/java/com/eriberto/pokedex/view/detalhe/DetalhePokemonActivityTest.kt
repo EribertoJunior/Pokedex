@@ -27,7 +27,7 @@ class DetalhePokemonActivityTest {
     private val startActivityIntent =
         Intent(ApplicationProvider.getApplicationContext(), DetalhePokemonActivity::class.java)
             .putExtra(MainActivity.ID_POKEMON, idPokemon)
-            .putExtra(MainActivity.NOME_POKEMON, nomePokemon)
+            .putExtra(MainActivity.POKEMON_SELECIONADO, nomePokemon)
 
     @get:Rule
     val activity = ActivityScenarioRule<DetalhePokemonActivity>(startActivityIntent)

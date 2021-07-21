@@ -41,7 +41,7 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
         private val shimerConteiner = view.findViewById<ShimmerFrameLayout>(R.id.shimerConteiner)
         fun bind(item: PokemonData) {
             tvNomePokemon.text = item.name
-            btDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item.name) }
+            btDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item) }
             shimerConteiner.startShimmer()
             Glide.with(ivPokemon)
                 .load(ivPokemon.context.getString(R.string.url_imagem, getIdPokemon(item.url)))
@@ -63,7 +63,7 @@ class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
     }
 
     interface OnClickListener {
-        fun itemClick(idPokemon: Int, name: String)
+        fun itemClick(idPokemon: Int, pokemonData: PokemonData)
     }
 
 }

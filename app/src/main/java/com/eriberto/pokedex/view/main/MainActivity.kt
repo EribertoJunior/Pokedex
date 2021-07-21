@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eriberto.pokedex.R
+import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.view.detalhe.DetalhePokemonActivity
 import com.eriberto.pokedex.viewmodel.MainActivityViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         const val ID_POKEMON = "idPokemon"
-        const val NOME_POKEMON = "nomePokemon"
+        const val POKEMON_SELECIONADO = "nomePokemon"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +64,8 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
 
             myAdapter = MyRecyclerViewAdapter(object : MyRecyclerViewAdapter.OnClickListener {
-                override fun itemClick(idPokemon: Int, name: String) {
-                    irParaTelaDeDetalhes(idPokemon, name)
+                override fun itemClick(idPokemon: Int, pokemonData: PokemonData) {
+                    irParaTelaDeDetalhes(idPokemon, pokemonData)
                 }
             })
             adapter = myAdapter
@@ -72,11 +73,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun irParaTelaDeDetalhes(idPokemon: Int, name: String) {
+    private fun irParaTelaDeDetalhes(idPokemon: Int, pokemonData: PokemonData) {
         startActivity(
             Intent(this, DetalhePokemonActivity::class.java)
                 .putExtra(ID_POKEMON, idPokemon)
-                .putExtra(NOME_POKEMON, name)
+                .putExtra(POKEMON_SELECIONADO, pokemonData)
         )
     }
 

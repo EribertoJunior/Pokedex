@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eriberto.pokedex.R
 import com.eriberto.pokedex.repository.model.PokeDetalhe
+import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.repository.model.TypeSlot
 import com.eriberto.pokedex.repository.network.STATUS_RESULT
 import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.view.main.MainActivity.Companion.ID_POKEMON
-import com.eriberto.pokedex.view.main.MainActivity.Companion.NOME_POKEMON
-import com.eriberto.pokedex.viewmodel.DetalhePokemonViewModel
+import com.eriberto.pokedex.view.main.MainActivity.Companion.POKEMON_SELECIONADO
+import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
+import com.eriberto.pokedex.viewmodel.detalhe.model.PokeDetalheData
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,41 +27,71 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetalhePokemonActivity : AppCompatActivity() {
 
+    private val fbFavoritar: FloatingActionButton by lazy {
+        findViewById(R.id.fb_favoritar)
+    }
+
     private val viewModel: DetalhePokemonViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalhe_pokemon)
 
-
-        if (intent.hasExtra(ID_POKEMON) && intent.hasExtra(NOME_POKEMON)) {
+        if (intent.hasExtra(ID_POKEMON) && intent.hasExtra(POKEMON_SELECIONADO)) {
             val idPokemon = intent.getIntExtra(ID_POKEMON, 0)
-            val nomePokemon = intent.getStringExtra(NOME_POKEMON)
-            showNomePokemon(nomePokemon)
+            val pokemonRecebido = intent.getSerializableExtra(POKEMON_SELECIONADO) as PokemonData
+            showNomePokemon(pokemonRecebido.name)
             showImagePokemon(idPokemon)
-            initObserver(idPokemon)
+            initDetalhesObserver(idPokemon)
+            configuraBotaoFavoritar(pokemonRecebido)
         }
-
-        configuraBotaoFavoritar()
-
     }
 
-    private fun configuraBotaoFavoritar() {
-        val fbFavoritar: FloatingActionButton = findViewById(R.id.fb_favoritar)
-        var boolean = true
-        fbFavoritar.setOnClickListener {
-            if(boolean){
-                fbFavoritar.apply {
-                    setImageResource(R.drawable.star)
-                    imageTintList = ContextCompat.getColorStateList(applicationContext, R.color.yellow)
+    private fun configuraBotaoFavoritar(pokemonRecebido: PokemonData) {
+        initFavoritesObserver(pokemonRecebido)
+        viewModel.isFavorite(pokemonRecebido.name)
+    }
+
+    private fun initFavoritesObserver(pokemonRecebido: PokemonData) {
+        viewModel.isFavoriteData.observe(this, { isFavorite ->
+            if (isFavorite) {
+                goldenIconSet(pokemonRecebido)
+            } else {
+                backIconSet(pokemonRecebido)
+            }
+        })
+    }
+
+    private fun backIconSet(pokemonRecebido: PokemonData) {
+        fbFavoritar.apply {
+            setImageResource(R.drawable.star_outline)
+            imageTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.black)
+            setOnClickListener { viewModel.favoritarPokemon(pokemonRecebido) }
+        }
+    }
+
+    private fun goldenIconSet(pokemonRecebido: PokemonData) {
+        fbFavoritar.apply {
+            setImageResource(R.drawable.star)
+            imageTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.yellow)
+            setOnClickListener { viewModel.desfavoritarPokemon(pokemonRecebido) }
+
+        }
+    }
+
+    private fun initDetalhesObserver(idPokemon: Int) {
+        viewModel.getDetalhesPokemon(idPokemon)
+        viewModel.detalhePokemonData.observe(this, {
+            when (it.statusResult) {
+                STATUS_RESULT.Success -> {
+                    exibirDetalhes(it.pokeDetalhe)
                 }
-            }else{
-                fbFavoritar.apply {
-                    setImageResource(R.drawable.star_outline)
-                    imageTintList = ContextCompat.getColorStateList(applicationContext, R.color.black)
+                STATUS_RESULT.Error -> {
+                    exibirMensagemDeErro(it)
                 }
             }
-            boolean = !boolean
-        }
+        })
     }
 
     private fun showImagePokemon(idPokemon: Int) {
@@ -74,25 +106,12 @@ class DetalhePokemonActivity : AppCompatActivity() {
     }
 
     private fun showNomePokemon(nomePokemon: String?) {
-        val collapsingToolbar: CollapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_detalhes_pokemon)
+        val collapsingToolbar: CollapsingToolbarLayout =
+            findViewById(R.id.collapsing_toolbar_detalhes_pokemon)
         collapsingToolbar.title = nomePokemon
     }
 
-    private fun initObserver(idPokemon: Int) {
-        viewModel.getDetalhesPokemon(idPokemon)
-        viewModel.detalhePokemonData.observe(this, {
-            when (it.statusResult) {
-                STATUS_RESULT.Success -> {
-                    exibirDetalhes(it.pokeDetalhe)
-                }
-                STATUS_RESULT.Error -> {
-                    exibirMensagemDeErro(it)
-                }
-            }
-        })
-    }
-
-    private fun exibirMensagemDeErro(it: DetalhePokemonViewModel.PokeDetalheData) {
+    private fun exibirMensagemDeErro(it: PokeDetalheData) {
         esconderProgressBar()
         Toast.makeText(this, it.errorMessage, Toast.LENGTH_LONG).show()
     }
@@ -115,7 +134,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
             val tamanhoDaLista = it.abilities.size - 1
             it.abilities.forEachIndexed { index, abilitySlot ->
                 abilitiesNames += abilitySlot.ability.name
-                if (index < tamanhoDaLista){
+                if (index < tamanhoDaLista) {
                     abilitiesNames += "\n"
                 }
             }
@@ -124,7 +143,8 @@ class DetalhePokemonActivity : AppCompatActivity() {
             tvHabilidade.text = abilitiesNames
             tvAltura.text = (it.height / 10).toString().plus(" m")
             tvPeso.text = (it.weight / 10).toString().plus(" kg")
-            tvTitleAbilities.text = resources.getQuantityText(R.plurals.habilidades, it.abilities.size)
+            tvTitleAbilities.text =
+                resources.getQuantityText(R.plurals.habilidades, it.abilities.size)
         }
 
     }

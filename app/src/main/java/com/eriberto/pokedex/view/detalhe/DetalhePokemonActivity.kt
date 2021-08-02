@@ -111,9 +111,9 @@ class DetalhePokemonActivity : AppCompatActivity() {
         collapsingToolbar.title = nomePokemon
     }
 
-    private fun exibirMensagemDeErro(it: PokeDetalheData) {
+    private fun exibirMensagemDeErro(pokeDetalheData: PokeDetalheData) {
         esconderProgressBar()
-        Toast.makeText(this, it.errorMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, pokeDetalheData.errorMessage, Toast.LENGTH_LONG).show()
     }
 
     private fun esconderProgressBar() {

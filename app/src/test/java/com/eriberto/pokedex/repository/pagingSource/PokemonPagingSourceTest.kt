@@ -29,7 +29,7 @@ class PokemonPagingSourceTest {
 
         runBlocking { pokemonPagingSource.load(loadParamsMock) }
 
-        coVerify { pokemonPagingSource.loadResultSuccess(any(), any()) }
+        coVerify { pokemonPagingSource.loadResultSuccess(any(), any(), any()) }
 
     }
 

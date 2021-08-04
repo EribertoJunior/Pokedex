@@ -18,12 +18,12 @@ class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<I
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonData> {
         return try {
-            val nextOffset: Int = params.key ?: PRIMEIRO_DESLOCAMENTO_OFFSET
-            val response = pokeService.getListPokemon(offset = nextOffset)
-
+            val offsetAtual: Int = params.key ?: PRIMEIRO_DESLOCAMENTO_OFFSET
+            val response = pokeService.getListPokemon(offset = offsetAtual)
             val nextOffsetNumber: Int? = getNextOffSet(response)
 
-            loadResultSuccess(response, nextOffsetNumber)
+            loadResultSuccess(response, offsetAtual, nextOffsetNumber)
+
         } catch (e: IOException) {
             loadResultError(e)
         } catch (e: HttpException) {
@@ -33,13 +33,21 @@ class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<I
         }
     }
 
-    fun loadResultError(e: Exception): LoadResult.Error<Int, PokemonData> = LoadResult.Error(e)
+    fun loadResultError(e: Exception): LoadResult.Error<Int, PokemonData> {
+        return LoadResult.Error(e)
+    }
 
-    fun loadResultSuccess(response: PokemonList, nextOffsetNumber: Int?) = LoadResult.Page(
-        data = response.results,
-        prevKey = null,
-        nextKey = nextOffsetNumber
-    )
+    fun loadResultSuccess(
+        response: PokemonList,
+        offsetAtual: Int,
+        nextOffsetNumber: Int?
+    ): LoadResult.Page<Int, PokemonData> {
+        return LoadResult.Page(
+            data = response.results,
+            prevKey = if (offsetAtual == PRIMEIRO_DESLOCAMENTO_OFFSET) null else offsetAtual - 1,
+            nextKey = nextOffsetNumber
+        )
+    }
 
     private fun getNextOffSet(response: PokemonList): Int? {
         var nextOffsetNumber: Int? = null

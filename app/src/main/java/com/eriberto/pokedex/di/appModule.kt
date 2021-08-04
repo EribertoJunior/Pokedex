@@ -1,9 +1,9 @@
 package com.eriberto.pokedex.di
 
-import com.eriberto.pokedex.repository.DetalhePokemonRepo
-import com.eriberto.pokedex.repository.DetalhePokemonRepoImp
+import com.eriberto.pokedex.repository.PokemonRepo
+import com.eriberto.pokedex.repository.PokemonRepoImp
 import com.eriberto.pokedex.repository.database.config.PokemonDatabase
-import com.eriberto.pokedex.viewmodel.MainActivityViewModel
+import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import com.eriberto.pokedex.repository.network.RetroConfig
 import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
 import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
@@ -20,9 +20,9 @@ val appModule = module {
     }
 
     factory { PokemonPagingSource(pokeService = get()) }
-    factory { PokemonDatabase.getDatabase(androidContext()).pokemonDAO() }
-    factory<DetalhePokemonRepo> { DetalhePokemonRepoImp(pokeService = get(), pokemonDAO = get()) }
+    single { PokemonDatabase.getDatabase(androidContext()).pokemonDAO() }
+    factory<PokemonRepo> { PokemonRepoImp(pokeService = get(), pokemonDAO = get()) }
 
-    viewModel { MainActivityViewModel(pokemonPagingSource = get()) }
-    viewModel { DetalhePokemonViewModel(detalhePokemonRepo = get()) }
+    viewModel { ListaPokemonViewModel(pokemonRepo = get()) }
+    viewModel { DetalhePokemonViewModel(pokemonRepo = get()) }
 }

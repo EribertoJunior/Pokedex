@@ -16,8 +16,8 @@ import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.repository.model.TypeSlot
 import com.eriberto.pokedex.repository.network.STATUS_RESULT
 import com.eriberto.pokedex.util.GlideResquestListener
-import com.eriberto.pokedex.view.main.MainActivity.Companion.ID_POKEMON
-import com.eriberto.pokedex.view.main.MainActivity.Companion.POKEMON_SELECIONADO
+import com.eriberto.pokedex.view.main.ListaPokemonActivity.Companion.ID_POKEMON
+import com.eriberto.pokedex.view.main.ListaPokemonActivity.Companion.POKEMON_SELECIONADO
 import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
 import com.eriberto.pokedex.viewmodel.detalhe.model.PokeDetalheData
 import com.facebook.shimmer.ShimmerFrameLayout

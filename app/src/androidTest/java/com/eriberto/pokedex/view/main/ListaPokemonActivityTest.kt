@@ -20,10 +20,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class ListaPokemonActivityTest {
 
     @get:Rule
-    val activity = ActivityScenarioRule(MainActivity::class.java)
+    val activity = ActivityScenarioRule(ListaPokemonActivity::class.java)
 
     lateinit var mockWebServer: MockWebServer
 
@@ -39,7 +39,7 @@ class MainActivityTest {
     fun deve_ExibirCinquentaPokemons_QuandoReceberCinquentaPokemonsDaAPI() {
         configuraRetornoPaginadoAPI()
         onView(withId(R.id.recyclerViewListaPokemon))
-            .perform(scrollToPosition<MyRecyclerViewAdapter.MeuViewHolder>(49))
+            .perform(scrollToPosition<ListaPokemonAdapter.MeuViewHolder>(49))
             .check(matches(aparecePokemonNaPosicao(position = 49, namePokemon = "diglett")))
     }
 

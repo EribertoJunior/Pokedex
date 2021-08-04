@@ -7,11 +7,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.eriberto.pokedex.R
+import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.util.MockWebServerUtil.getDispatchResponse
 import com.eriberto.pokedex.util.MockWebServerUtil.registraOkHttp
 import com.eriberto.pokedex.util.ViewMatcher.apareceNoCollapsibleToolbarOTitilo
 import com.eriberto.pokedex.util.ViewMatcher.apareceTipoPokemonNaPosicao
-import com.eriberto.pokedex.view.main.MainActivity
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.After
@@ -21,13 +21,17 @@ import org.junit.Test
 
 class DetalhePokemonActivityTest {
 
-    private val nomePokemon = "bulbasaur"
+    private val nomePokemon = PokemonData(name = "bulbasaur", url = "/1")
     private val idPokemon = 1
+    companion object{
+        const val ID_POKEMON = "idPokemon"
+        const val POKEMON_SELECIONADO = "nomePokemon"
+    }
 
     private val startActivityIntent =
         Intent(ApplicationProvider.getApplicationContext(), DetalhePokemonActivity::class.java)
-            .putExtra(MainActivity.ID_POKEMON, idPokemon)
-            .putExtra(MainActivity.POKEMON_SELECIONADO, nomePokemon)
+            .putExtra(ID_POKEMON, idPokemon)
+            .putExtra(POKEMON_SELECIONADO, nomePokemon)
 
     @get:Rule
     val activity = ActivityScenarioRule<DetalhePokemonActivity>(startActivityIntent)

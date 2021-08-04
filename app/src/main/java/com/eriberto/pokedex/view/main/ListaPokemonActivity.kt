@@ -14,18 +14,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eriberto.pokedex.R
 import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.view.detalhe.DetalhePokemonActivity
-import com.eriberto.pokedex.viewmodel.MainActivityViewModel
+import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class ListaPokemonActivity : AppCompatActivity() {
 
-    private lateinit var myAdapter: MyRecyclerViewAdapter
+    private lateinit var myAdapter: ListaPokemonAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
 
-    private val viewModel: MainActivityViewModel by viewModel()
+    private val viewModel: ListaPokemonViewModel by viewModel()
 
     companion object{
         const val ID_POKEMON = "idPokemon"
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         lifecycleScope.launchWhenCreated {
-            viewModel.getListPokemon().collectLatest {
+            viewModel.getPokemonStream().collectLatest {
                 myAdapter.submitData(it)
             }
         }
@@ -61,9 +61,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewListaPokemon)
 
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@ListaPokemonActivity)
 
-            myAdapter = MyRecyclerViewAdapter(object : MyRecyclerViewAdapter.OnClickListener {
+            myAdapter = ListaPokemonAdapter(object : ListaPokemonAdapter.OnClickListener {
                 override fun itemClick(idPokemon: Int, pokemonData: PokemonData) {
                     irParaTelaDeDetalhes(idPokemon, pokemonData)
                 }

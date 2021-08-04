@@ -15,8 +15,8 @@ import com.eriberto.pokedex.repository.model.PokemonData
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.button.MaterialButton
 
-class MyRecyclerViewAdapter(private val onClickListener: OnClickListener) :
-    PagingDataAdapter<PokemonData, MyRecyclerViewAdapter.MeuViewHolder>(DiffUtilCallBack()) {
+class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
+    PagingDataAdapter<PokemonData, ListaPokemonAdapter.MeuViewHolder>(DiffUtilCallBack()) {
 
     override fun onBindViewHolder(holder: MeuViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }

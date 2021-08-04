@@ -1,33 +1,42 @@
 package com.eriberto.pokedex.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.eriberto.pokedex.repository.database.config.service.PokemonDAO
 import com.eriberto.pokedex.repository.database.model.PokemonLocal
 import com.eriberto.pokedex.repository.model.PokeDetalhe
 import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.repository.network.PokeService
-import com.eriberto.pokedex.util.Result
+import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
+import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
 
-class DetalhePokemonRepoImp(
+class PokemonRepoImp(
     private val pokeService: PokeService,
     private val pokemonDAO: PokemonDAO
-) : DetalhePokemonRepo {
+) : PokemonRepo {
 
-    override suspend fun getDetalhePokemon(idPokemon: Int, result: Result<PokeDetalhe>) {
+    override suspend fun getDetalhePokemon(
+        idPokemon: Int,
+        success: (data: PokeDetalhe) -> Unit,
+        erro: (errorMessage: String) -> Unit
+    ) {
         val call = pokeService.getDetalhePokemon(idPokemon)
         call.enqueue(object : Callback<PokeDetalhe> {
             override fun onResponse(call: Call<PokeDetalhe>, response: Response<PokeDetalhe>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { result.success(data = it) }
+                    response.body()?.let { success(it) }
                 } else
-                    result.error(HttpException(response).message())
+                    erro(HttpException(response).message())
             }
 
             override fun onFailure(call: Call<PokeDetalhe>, t: Throwable) {
-                t.message?.let { result.error(errorMessage = it) }
+                t.message?.let { erro(it) }
             }
         })
     }
@@ -51,6 +60,17 @@ class DetalhePokemonRepoImp(
 
     override suspend fun isFavoritePokemon(namePokemon: String): Boolean {
         return getFavoritePokemon(namePokemon) != null
+    }
+
+    override fun getPokemonStream(): Flow<PagingData<PokemonData>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = ListaPokemonViewModel.PAGE_SIZE,
+                prefetchDistance = ListaPokemonViewModel.PREFETCH_SIZE,
+                maxSize = ListaPokemonViewModel.MAX_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { PokemonPagingSource(pokeService) }).flow
     }
 
     private fun getFavoritePokemon(namePokemon: String): PokemonLocal? {

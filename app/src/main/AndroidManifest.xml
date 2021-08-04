@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Pokedex">
         <activity android:name=".view.detalhe.DetalhePokemonActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.main.MainActivity"
+        <activity android:name=".view.main.ListaPokemonActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -41,7 +41,7 @@ class PokemonRepoImpTest {
 
         every { resultMock.success(any()) } answers {}
 
-        runBlocking { detalhePokemonRepoImp.getDetalhePokemon(1, success = { }, erro = { }) }
+        runBlocking { detalhePokemonRepoImp.buscarDetalhesDoPokemon(1, success = { }, erro = { }) }
 
         coVerify { resultMock.success(any()) }
     }
@@ -65,7 +65,7 @@ class PokemonRepoImpTest {
 
         every { resultMock.error(any()) } answers {}
 
-        runBlocking { detalhePokemonRepoImp.getDetalhePokemon(1, success = { }, erro = { }) }
+        runBlocking { detalhePokemonRepoImp.buscarDetalhesDoPokemon(1, success = { }, erro = { }) }
 
         coVerify { resultMock.error(any()) }
     }
@@ -82,7 +82,7 @@ class PokemonRepoImpTest {
         }
         every { resultMock.error(any()) } answers {}
 
-        runBlocking { detalhePokemonRepoImp.getDetalhePokemon(1, success = { }, erro = { }) }
+        runBlocking { detalhePokemonRepoImp.buscarDetalhesDoPokemon(1, success = { }, erro = { }) }
 
         coVerify { resultMock.error(any()) }
 

@@ -19,7 +19,7 @@ class DetalhePokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel(
 
     fun getDetalhesPokemon(idPokemon: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            pokemonRepo.getDetalhePokemon(
+            pokemonRepo.buscarDetalhesDoPokemon(
                 idPokemon = idPokemon,
                 success = { detalhesDoPokemon ->
                     _detalhePokemonData.postValue(

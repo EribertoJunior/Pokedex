@@ -1,5 +1,6 @@
 package com.eriberto.pokedex.repository
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -21,7 +22,7 @@ class PokemonRepoImp(
     private val pokemonDAO: PokemonDAO
 ) : PokemonRepo {
 
-    override suspend fun getDetalhePokemon(
+    override suspend fun buscarDetalhesDoPokemon(
         idPokemon: Int,
         success: (data: PokeDetalhe) -> Unit,
         erro: (errorMessage: String) -> Unit
@@ -42,7 +43,7 @@ class PokemonRepoImp(
     }
 
     override suspend fun favoritarPokemon(pokemonData: PokemonData): Boolean {
-        val pokemonFavorito = getFavoritePokemon(pokemonData.name)
+        val pokemonFavorito = getFavoritePokemon(pokemonData.name).value
         val idPokemonLocal: Long = pokemonFavorito?.id ?: 0
         val pokemonLocal = map(idPokemon = idPokemonLocal, pokemonData = pokemonData)
         pokemonDAO.salva(pokemonLocal)
@@ -50,7 +51,7 @@ class PokemonRepoImp(
     }
 
     override suspend fun desfavoritarPokemon(pokemonData: PokemonData): Boolean {
-        val pokemonFavorito = getFavoritePokemon(pokemonData.name)
+        val pokemonFavorito = getFavoritePokemon(pokemonData.name).value
         val idPokemonLocal: Long = pokemonFavorito?.id ?: 0
         pokemonDAO.deletar(
             map(idPokemon = idPokemonLocal, pokemonData = pokemonData)
@@ -73,7 +74,7 @@ class PokemonRepoImp(
             pagingSourceFactory = { PokemonPagingSource(pokeService) }).flow
     }
 
-    private fun getFavoritePokemon(namePokemon: String): PokemonLocal? {
+    private fun getFavoritePokemon(namePokemon: String): LiveData<PokemonLocal?> {
         return pokemonDAO.verificarPokemonLocal(namePokemon)
     }
 

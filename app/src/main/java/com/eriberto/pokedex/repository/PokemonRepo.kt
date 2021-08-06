@@ -8,7 +8,7 @@ import com.eriberto.pokedex.repository.model.PokemonData
 import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepo {
-    suspend fun getDetalhePokemon(
+    suspend fun buscarDetalhesDoPokemon(
         idPokemon: Int,
         success: (data: PokeDetalhe) -> Unit,
         erro: (errorMessage: String) -> Unit

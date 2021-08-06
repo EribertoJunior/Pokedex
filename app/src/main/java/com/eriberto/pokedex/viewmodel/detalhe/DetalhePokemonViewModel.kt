@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eriberto.pokedex.repository.PokemonRepo
+import com.eriberto.pokedex.repository.database.model.PokemonLocal
 import com.eriberto.pokedex.repository.model.PokemonData
 import com.eriberto.pokedex.repository.network.STATUS_RESULT
 import com.eriberto.pokedex.viewmodel.detalhe.model.PokeDetalheData
@@ -15,9 +16,6 @@ class DetalhePokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel(
 
     private val _detalhePokemonData = MutableLiveData<PokeDetalheData>()
     val detalhePokemonData: LiveData<PokeDetalheData> = _detalhePokemonData
-
-    private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavoriteData: LiveData<Boolean> = _isFavorite
 
     fun getDetalhesPokemon(idPokemon: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -46,21 +44,16 @@ class DetalhePokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel(
     fun favoritarPokemon(pokemonData: PokemonData) {
         viewModelScope.launch(Dispatchers.IO) {
             pokemonRepo.favoritarPokemon(pokemonData)
-            isFavorite(pokemonData.name)
         }
     }
 
     fun desfavoritarPokemon(pokemonData: PokemonData) {
         viewModelScope.launch(Dispatchers.IO) {
             pokemonRepo.desfavoritarPokemon(pokemonData)
-            isFavorite(pokemonData.name)
         }
     }
 
-    fun isFavorite(namePokemon: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val isFavorite = pokemonRepo.isFavoritePokemon(namePokemon)
-            _isFavorite.postValue(isFavorite)
-        }
+    fun isFavorite(namePokemon: String): LiveData<PokemonLocal?> {
+        return pokemonRepo.isFavoritePokemon(namePokemon)
     }
 }

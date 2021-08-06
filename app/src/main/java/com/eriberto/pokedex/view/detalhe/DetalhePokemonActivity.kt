@@ -42,18 +42,13 @@ class DetalhePokemonActivity : AppCompatActivity() {
             showNomePokemon(pokemonRecebido.name)
             showImagePokemon(idPokemon)
             initDetalhesObserver(idPokemon)
-            configuraBotaoFavoritar(pokemonRecebido)
+            initFavoritesObserver(pokemonRecebido)
         }
     }
 
-    private fun configuraBotaoFavoritar(pokemonRecebido: PokemonData) {
-        initFavoritesObserver(pokemonRecebido)
-        viewModel.isFavorite(pokemonRecebido.name)
-    }
-
     private fun initFavoritesObserver(pokemonRecebido: PokemonData) {
-        viewModel.isFavoriteData.observe(this, { isFavorite ->
-            if (isFavorite) {
+        viewModel.isFavorite(pokemonRecebido.name).observe(this, { pokemonFavorito ->
+            if (pokemonFavorito != null) {
                 goldenIconSet(pokemonRecebido)
             } else {
                 backIconSet(pokemonRecebido)

@@ -1,5 +1,6 @@
 package com.eriberto.pokedex.repository.database.config.service
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.eriberto.pokedex.repository.database.model.PokemonLocal
 
@@ -15,5 +16,5 @@ interface PokemonDAO {
     fun deletar(pokemonLocal: PokemonLocal)
 
     @Query("SELECT * FROM PokemonLocal WHERE name = :nomePokemon")
-    fun verificarPokemonLocal(nomePokemon: String): PokemonLocal?
+    fun verificarPokemonLocal(nomePokemon: String): LiveData<PokemonLocal?>
 }

@@ -58,8 +58,8 @@ class PokemonRepoImp(
         return true
     }
 
-    override suspend fun isFavoritePokemon(namePokemon: String): Boolean {
-        return getFavoritePokemon(namePokemon) != null
+    override fun isFavoritePokemon(namePokemon: String): LiveData<PokemonLocal?> {
+        return getFavoritePokemon(namePokemon)
     }
 
     override fun getPokemonStream(): Flow<PagingData<PokemonData>> {

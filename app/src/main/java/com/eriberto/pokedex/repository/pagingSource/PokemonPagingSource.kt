@@ -3,20 +3,20 @@ package com.eriberto.pokedex.repository.pagingSource
 import android.net.Uri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.eriberto.pokedex.repository.model.PokemonData
-import com.eriberto.pokedex.repository.model.PokemonList
+import com.eriberto.pokedex.repository.model.Pokemon
+import com.eriberto.pokedex.repository.model.RetornoPokemon
 import com.eriberto.pokedex.repository.network.PokeService
 import retrofit2.HttpException
 import java.io.IOException
 import java.lang.Exception
 
-class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<Int, PokemonData>() {
+class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<Int, Pokemon>() {
 
-    override fun getRefreshKey(state: PagingState<Int, PokemonData>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Pokemon>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokemonData> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pokemon> {
         return try {
             val offsetAtual: Int = params.key ?: PRIMEIRO_DESLOCAMENTO_OFFSET
             val response = pokeService.getListPokemon(offset = offsetAtual)
@@ -33,15 +33,15 @@ class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<I
         }
     }
 
-    fun loadResultError(e: Exception): LoadResult.Error<Int, PokemonData> {
+    fun loadResultError(e: Exception): LoadResult.Error<Int, Pokemon> {
         return LoadResult.Error(e)
     }
 
     fun loadResultSuccess(
-        response: PokemonList,
+        response: RetornoPokemon,
         offsetAtual: Int,
         nextOffsetNumber: Int?
-    ): LoadResult.Page<Int, PokemonData> {
+    ): LoadResult.Page<Int, Pokemon> {
         return LoadResult.Page(
             data = response.results,
             prevKey = if (offsetAtual == PRIMEIRO_DESLOCAMENTO_OFFSET) null else offsetAtual - 1,
@@ -49,7 +49,7 @@ class PokemonPagingSource(private val pokeService: PokeService) : PagingSource<I
         )
     }
 
-    private fun getNextOffSet(response: PokemonList): Int? {
+    private fun getNextOffSet(response: RetornoPokemon): Int? {
         var nextOffsetNumber: Int? = null
         if (response.next.isNullOrEmpty().not()) {
             val uri = Uri.parse(response.next)

@@ -1,7 +1,7 @@
 package com.eriberto.pokedex.repository.network
 
-import com.eriberto.pokedex.repository.model.PokeDetalhe
-import com.eriberto.pokedex.repository.model.PokemonList
+import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
+import com.eriberto.pokedex.repository.model.RetornoPokemon
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,8 +13,8 @@ interface PokeService {
     suspend fun getListPokemon(
         @Query("limit") limit: Int = 10,
         @Query("offset") offset: Int
-    ): PokemonList
+    ): RetornoPokemon
 
     @GET("pokemon/{idPokemon}")
-    fun getDetalhePokemon(@Path("idPokemon") idPokemon: Int) : Call<PokeDetalhe>
+    fun getDetalhePokemon(@Path("idPokemon") idPokemon: Int) : Call<RetornoPokemonDetalhe>
 }

@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.model.PokeDetalhe
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
 import com.eriberto.pokedex.repository.model.TypeSlot
 import com.eriberto.pokedex.repository.network.STATUS_RESULT
 import com.eriberto.pokedex.util.GlideResquestListener
@@ -38,7 +38,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
 
         if (intent.hasExtra(ID_POKEMON) && intent.hasExtra(POKEMON_SELECIONADO)) {
             val idPokemon = intent.getIntExtra(ID_POKEMON, 0)
-            val pokemonRecebido = intent.getSerializableExtra(POKEMON_SELECIONADO) as PokemonData
+            val pokemonRecebido = intent.getSerializableExtra(POKEMON_SELECIONADO) as EntidadePokemon
             showNomePokemon(pokemonRecebido.name)
             showImagePokemon(idPokemon)
             initDetalhesObserver(idPokemon)
@@ -46,8 +46,8 @@ class DetalhePokemonActivity : AppCompatActivity() {
         }
     }
 
-    private fun initFavoritesObserver(pokemonRecebido: PokemonData) {
-        viewModel.isFavorite(pokemonRecebido.name).observe(this, { pokemonFavorito ->
+    private fun initFavoritesObserver(pokemonRecebido: EntidadePokemon) {
+        viewModel.isFavorite(pokemonRecebido.id).observe(this, { pokemonFavorito ->
             if (pokemonFavorito != null) {
                 goldenIconSet(pokemonRecebido)
             } else {
@@ -56,7 +56,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
         })
     }
 
-    private fun backIconSet(pokemonRecebido: PokemonData) {
+    private fun backIconSet(pokemonRecebido: EntidadePokemon) {
         fbFavoritar.apply {
             setImageResource(R.drawable.star_outline)
             imageTintList =
@@ -65,7 +65,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
         }
     }
 
-    private fun goldenIconSet(pokemonRecebido: PokemonData) {
+    private fun goldenIconSet(pokemonRecebido: EntidadePokemon) {
         fbFavoritar.apply {
             setImageResource(R.drawable.star)
             imageTintList =
@@ -80,7 +80,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
         viewModel.detalhePokemonData.observe(this, {
             when (it.statusResult) {
                 STATUS_RESULT.Success -> {
-                    exibirDetalhes(it.pokeDetalhe)
+                    exibirDetalhes(it.retornoPokemonDetalhe)
                 }
                 STATUS_RESULT.Error -> {
                     exibirMensagemDeErro(it)
@@ -116,7 +116,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
         progressBarTelaDetalhe.visibility = View.GONE
     }
 
-    private fun exibirDetalhes(pokeDetalhe: PokeDetalhe?) {
+    private fun exibirDetalhes(retornoPokemonDetalhe: RetornoPokemonDetalhe?) {
         val tvTitleAbilities: TextView = findViewById(R.id.tvTitleAbilities)
         val tvHabilidade: TextView = findViewById(R.id.tvHabilidade)
         val tvAltura: TextView = findViewById(R.id.tvAltura)
@@ -124,7 +124,7 @@ class DetalhePokemonActivity : AppCompatActivity() {
 
         esconderProgressBar()
 
-        pokeDetalhe?.let {
+        retornoPokemonDetalhe?.let {
             var abilitiesNames = ""
             val tamanhoDaLista = it.abilities.size - 1
             it.abilities.forEachIndexed { index, abilitySlot ->

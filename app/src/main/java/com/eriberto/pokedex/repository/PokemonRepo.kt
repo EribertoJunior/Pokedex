@@ -2,23 +2,24 @@ package com.eriberto.pokedex.repository
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
-import com.eriberto.pokedex.repository.database.model.PokemonLocal
-import com.eriberto.pokedex.repository.model.PokeDetalhe
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.repository.database.model.PokemonFavorito
+import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
+import com.eriberto.pokedex.repository.model.Pokemon
 import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepo {
     suspend fun buscarDetalhesDoPokemon(
         idPokemon: Int,
-        success: (data: PokeDetalhe) -> Unit,
+        success: (data: RetornoPokemonDetalhe) -> Unit,
         erro: (errorMessage: String) -> Unit
     )
 
-    suspend fun favoritarPokemon(pokemonData: PokemonData): Boolean
+    suspend fun favoritarPokemon(pokemon: EntidadePokemon)
 
-    suspend fun desfavoritarPokemon(pokemonData: PokemonData): Boolean
+    suspend fun desfavoritarPokemon(pokemon: EntidadePokemon)
 
-    fun isFavoritePokemon(namePokemon: String): LiveData<PokemonLocal?>
+    fun isFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?>
 
     fun getPokemonStream(): Flow<PagingData<PokemonData>>
 }

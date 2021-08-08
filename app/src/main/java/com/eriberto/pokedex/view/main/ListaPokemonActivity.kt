@@ -12,7 +12,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.repository.model.Pokemon
 import com.eriberto.pokedex.view.detalhe.DetalhePokemonActivity
 import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -64,8 +65,8 @@ class ListaPokemonActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@ListaPokemonActivity)
 
             myAdapter = ListaPokemonAdapter(object : ListaPokemonAdapter.OnClickListener {
-                override fun itemClick(idPokemon: Int, pokemonData: PokemonData) {
-                    irParaTelaDeDetalhes(idPokemon, pokemonData)
+                override fun itemClick(idPokemon: Int, pokemon: EntidadePokemon) {
+                    irParaTelaDeDetalhes(idPokemon, pokemon)
                 }
             })
             adapter = myAdapter
@@ -73,11 +74,11 @@ class ListaPokemonActivity : AppCompatActivity() {
 
     }
 
-    private fun irParaTelaDeDetalhes(idPokemon: Int, pokemonData: PokemonData) {
+    private fun irParaTelaDeDetalhes(idPokemon: Int, pokemon: EntidadePokemon) {
         startActivity(
             Intent(this, DetalhePokemonActivity::class.java)
                 .putExtra(ID_POKEMON, idPokemon)
-                .putExtra(POKEMON_SELECIONADO, pokemonData)
+                .putExtra(POKEMON_SELECIONADO, pokemon)
         )
     }
 

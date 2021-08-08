@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.database.model.EntidadePokemon
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.button.MaterialButton
 
@@ -52,18 +52,20 @@ class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
         }
     }
 
-    class DiffUtilCallBack : DiffUtil.ItemCallback<PokemonData>() {
+    companion object{
+        private val POKEMON_COMPARATOR = object : DiffUtil.ItemCallback<EntidadePokemon>() {
 
-        override fun areItemsTheSame(oldItem: PokemonData, newItem: PokemonData): Boolean {
-            return oldItem.name == newItem.name
-        }
-        override fun areContentsTheSame(oldItem: PokemonData, newItem: PokemonData): Boolean {
-            return oldItem == newItem
+            override fun areItemsTheSame(oldItem: EntidadePokemon, newItem: EntidadePokemon): Boolean {
+                return oldItem.name == newItem.name
+            }
+            override fun areContentsTheSame(oldItem: EntidadePokemon, newItem: EntidadePokemon): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 
     interface OnClickListener {
-        fun itemClick(idPokemon: Int, pokemonData: PokemonData)
+        fun itemClick(idPokemon: Int, pokemon: EntidadePokemon)
     }
 
 }

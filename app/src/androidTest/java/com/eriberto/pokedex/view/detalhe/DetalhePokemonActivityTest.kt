@@ -7,7 +7,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.model.Pokemon
 import com.eriberto.pokedex.util.MockWebServerUtil.getDispatchResponse
 import com.eriberto.pokedex.util.MockWebServerUtil.registraOkHttp
 import com.eriberto.pokedex.util.ViewMatcher.apareceNoCollapsibleToolbarOTitilo
@@ -21,7 +21,7 @@ import org.junit.Test
 
 class DetalhePokemonActivityTest {
 
-    private val nomePokemon = PokemonData(name = "bulbasaur", url = "/1")
+    private val nomePokemon = Pokemon(name = "bulbasaur", url = "/1")
     private val idPokemon = 1
     companion object{
         const val ID_POKEMON = "idPokemon"

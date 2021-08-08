@@ -3,9 +3,9 @@ package com.eriberto.pokedex.di
 import com.eriberto.pokedex.repository.PokemonRepo
 import com.eriberto.pokedex.repository.PokemonRepoImp
 import com.eriberto.pokedex.repository.database.config.PokemonDatabase
-import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import com.eriberto.pokedex.repository.network.RetroConfig
 import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
+import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel

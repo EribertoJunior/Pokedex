@@ -24,19 +24,22 @@ class PokemonRepoImp(
 
     override suspend fun buscarDetalhesDoPokemon(
         idPokemon: Int,
-        success: (data: PokeDetalhe) -> Unit,
+        success: (data: RetornoPokemonDetalhe) -> Unit,
         erro: (errorMessage: String) -> Unit
     ) {
         val call = pokeService.getDetalhePokemon(idPokemon)
-        call.enqueue(object : Callback<PokeDetalhe> {
-            override fun onResponse(call: Call<PokeDetalhe>, response: Response<PokeDetalhe>) {
+        call.enqueue(object : Callback<RetornoPokemonDetalhe> {
+            override fun onResponse(
+                call: Call<RetornoPokemonDetalhe>,
+                response: Response<RetornoPokemonDetalhe>
+            ) {
                 if (response.isSuccessful) {
                     response.body()?.let { success(it) }
                 } else
                     erro(HttpException(response).message())
             }
 
-            override fun onFailure(call: Call<PokeDetalhe>, t: Throwable) {
+            override fun onFailure(call: Call<RetornoPokemonDetalhe>, t: Throwable) {
                 t.message?.let { erro(it) }
             }
         })
@@ -66,9 +69,9 @@ class PokemonRepoImp(
     override fun getPokemonStream(): Flow<PagingData<PokemonData>> {
         return Pager(
             config = PagingConfig(
-                pageSize = ListaPokemonViewModel.PAGE_SIZE,
-                prefetchDistance = ListaPokemonViewModel.PREFETCH_SIZE,
-                maxSize = ListaPokemonViewModel.MAX_SIZE,
+                pageSize = PAGE_SIZE,
+                prefetchDistance = PREFETCH_SIZE,
+                maxSize = MAX_SIZE,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { PokemonPagingSource(pokeService) }).flow

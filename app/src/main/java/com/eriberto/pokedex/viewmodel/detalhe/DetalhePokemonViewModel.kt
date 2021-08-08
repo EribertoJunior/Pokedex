@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eriberto.pokedex.repository.PokemonRepo
-import com.eriberto.pokedex.repository.database.model.PokemonLocal
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.repository.database.model.PokemonFavorito
 import com.eriberto.pokedex.repository.network.STATUS_RESULT
 import com.eriberto.pokedex.viewmodel.detalhe.model.PokeDetalheData
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ class DetalhePokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel(
                 success = { detalhesDoPokemon ->
                     _detalhePokemonData.postValue(
                         PokeDetalheData(
-                            pokeDetalhe = detalhesDoPokemon,
+                            retornoPokemonDetalhe = detalhesDoPokemon,
                             statusResult = STATUS_RESULT.Success
                         )
                     )
@@ -41,19 +41,19 @@ class DetalhePokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel(
         }
     }
 
-    fun favoritarPokemon(pokemonData: PokemonData) {
+    fun favoritarPokemon(pokemon: EntidadePokemon) {
         viewModelScope.launch(Dispatchers.IO) {
-            pokemonRepo.favoritarPokemon(pokemonData)
+            pokemonRepo.favoritarPokemon(pokemon)
         }
     }
 
-    fun desfavoritarPokemon(pokemonData: PokemonData) {
+    fun desfavoritarPokemon(pokemon: EntidadePokemon) {
         viewModelScope.launch(Dispatchers.IO) {
-            pokemonRepo.desfavoritarPokemon(pokemonData)
+            pokemonRepo.desfavoritarPokemon(pokemon)
         }
     }
 
-    fun isFavorite(namePokemon: String): LiveData<PokemonLocal?> {
-        return pokemonRepo.isFavoritePokemon(namePokemon)
+    fun isFavorite(idPokemon: Int): LiveData<PokemonFavorito?> {
+        return pokemonRepo.isFavoritePokemon(idPokemon)
     }
 }

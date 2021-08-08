@@ -1,6 +1,6 @@
 package com.eriberto.pokedex.repository.model
 
-data class PokeDetalhe(
+data class RetornoPokemonDetalhe(
     val name: String?,
     val types: List<TypeSlot>,
     val weight: Double,

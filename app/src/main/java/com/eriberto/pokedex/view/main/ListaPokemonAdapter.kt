@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,7 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.button.MaterialButton
 
 class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
-    PagingDataAdapter<PokemonData, ListaPokemonAdapter.MeuViewHolder>(DiffUtilCallBack()) {
+    PagingDataAdapter<EntidadePokemon, ListaPokemonAdapter.MeuViewHolder>(POKEMON_COMPARATOR) {
 
     override fun onBindViewHolder(holder: MeuViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
@@ -37,12 +38,28 @@ class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
         private val tvNomePokemon = view.findViewById<TextView>(R.id.tvNomePokemon)
         private val btDetalhesPokemon = view.findViewById<MaterialButton>(R.id.btDetalhesPokemon)
         private val ivPokemon = view.findViewById<ImageView>(R.id.imagemDoPokemonItem)
+        private val ivEstrela = view.findViewById<ImageView>(R.id.ivEstrela)
 
         private val shimerConteiner = view.findViewById<ShimmerFrameLayout>(R.id.shimerConteiner)
-        fun bind(item: PokemonData) {
+        fun bind(item: EntidadePokemon) {
             tvNomePokemon.text = item.name
             btDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item) }
             shimerConteiner.startShimmer()
+
+            if (item.favorito){
+                ivEstrela.apply {
+                    setImageResource(R.drawable.star)
+                    imageTintList =
+                        ContextCompat.getColorStateList(ivEstrela.context, R.color.yellow)
+                }
+            }else{
+                ivEstrela.apply {
+                    setImageResource(R.drawable.star_outline)
+                    imageTintList =
+                        ContextCompat.getColorStateList(ivEstrela.context, R.color.black)
+                }
+            }
+
             Glide.with(ivPokemon)
                 .load(ivPokemon.context.getString(R.string.url_imagem, getIdPokemon(item.url)))
                 .placeholder(R.mipmap.pokeball_loading)

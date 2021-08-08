@@ -23,8 +23,6 @@ class PokemonRepoImp(
     private val pokemonDatabase: PokemonDatabase
 ) : PokemonRepo {
 
-    private val pokemonDAO = pokemonDatabase.pokemonDAO()
-
     override suspend fun buscarDetalhesDoPokemon(
         idPokemon: Int,
         success: (data: RetornoPokemonDetalhe) -> Unit,
@@ -51,13 +49,13 @@ class PokemonRepoImp(
     override suspend fun favoritarPokemon(pokemon: EntidadePokemon) {
         pokemonDatabase.pokemonFavoritoDAO().salvar(PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name))
         pokemon.favorito = true
-        pokemonDAO.salva(pokemon)
+        pokemonDatabase.pokemonDAO().salva(pokemon)
     }
 
     override suspend fun desfavoritarPokemon(pokemon: EntidadePokemon) {
         pokemonDatabase.pokemonFavoritoDAO().deletar(PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name))
         pokemon.favorito = false
-        pokemonDAO.salva(pokemon)
+        pokemonDatabase.pokemonDAO().salva(pokemon)
     }
 
     override fun isFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?> {
@@ -88,7 +86,7 @@ class PokemonRepoImp(
                 pokeService = pokeService,
                 pokemonDatabase = pokemonDatabase
             ),
-            pagingSourceFactory = { pokemonDAO.buscarPaginadaPokemon() }).flow
+            pagingSourceFactory = { pokemonDatabase.pokemonDAO().buscarPaginadaPokemon() }).flow
     }
 
     private fun getFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?> {

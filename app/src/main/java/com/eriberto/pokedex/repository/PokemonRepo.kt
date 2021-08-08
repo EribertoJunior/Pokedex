@@ -21,6 +21,8 @@ interface PokemonRepo {
 
     fun isFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?>
 
-    fun getPokemonStream(): Flow<PagingData<PokemonData>>
+    fun getPokemonStream(): Flow<PagingData<Pokemon>>
+
+    fun getPokemonStreamDB(): Flow<PagingData<EntidadePokemon>>
 }
 

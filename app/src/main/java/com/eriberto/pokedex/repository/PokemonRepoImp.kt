@@ -78,12 +78,30 @@ class PokemonRepoImp(
             pagingSourceFactory = { PokemonPagingSource(pokeService) }).flow
     }
 
-    private fun getFavoritePokemon(namePokemon: String): LiveData<PokemonLocal?> {
-        return pokemonDAO.verificarPokemonLocal(namePokemon)
+    @ExperimentalPagingApi
+    override fun getPokemonStreamDB(): Flow<PagingData<EntidadePokemon>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                prefetchDistance = PREFETCH_SIZE,
+                maxSize = MAX_SIZE,
+                enablePlaceholders = false
+            ),
+            remoteMediator = PokemonRemoteMediator(
+                pokeService = pokeService,
+                pokemonDatabase = pokemonDatabase
+            ),
+            pagingSourceFactory = { pokemonDAO.buscarPaginadaPokemon() }).flow
     }
 
-    private fun map(idPokemon: Long, pokemonData: PokemonData): PokemonLocal {
-        return PokemonLocal(id = idPokemon, name = pokemonData.name, url = pokemonData.url)
+    private fun getFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?> {
+        return pokemonDatabase.pokemonFavoritoDAO().verificaFavorito(idPokemon)
+    }
+
+    companion object {
+        const val PAGE_SIZE = 10
+        const val PREFETCH_SIZE = 50
+        const val MAX_SIZE = PAGE_SIZE + PREFETCH_SIZE * 3
     }
 
 }

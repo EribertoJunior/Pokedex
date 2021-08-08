@@ -1,6 +1,7 @@
 package com.eriberto.pokedex.repository.database.config.service
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.eriberto.pokedex.repository.database.model.EntidadePokemon
 
@@ -18,6 +19,12 @@ interface PokemonDAO {
     @Query("SELECT * FROM EntidadePokemon WHERE name = :nomePokemon")
     fun verificarPokemonLocal(nomePokemon: String): LiveData<EntidadePokemon?>
 
-    @Query("SELECT * FROM PokemonLocal WHERE name = :nomePokemon")
-    fun verificarPokemonLocal(nomePokemon: String): LiveData<PokemonLocal?>
+    @Query("DELETE FROM EntidadePokemon")
+    suspend fun limparFavoritos()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun salvarTodos(entidadePokemon:List<EntidadePokemon>)
+
+    @Query("SELECT * FROM EntidadePokemon order by favorito desc")
+    fun buscarPaginadaPokemon(): PagingSource<Int, EntidadePokemon>
 }

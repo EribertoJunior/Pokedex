@@ -46,7 +46,7 @@ class ListaPokemonActivity : AppCompatActivity() {
     private fun initClickDoBotaoTentarNovamente() {
         val btTentarNovamente : Button= findViewById(R.id.botaoTentarNovamente)
         btTentarNovamente.setOnClickListener {
-            initViewModel()
+            myAdapter.refresh()
         }
     }
 

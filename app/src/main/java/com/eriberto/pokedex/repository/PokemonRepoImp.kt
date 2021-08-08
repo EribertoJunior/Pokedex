@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.eriberto.pokedex.repository.database.config.service.PokemonDAO
-import com.eriberto.pokedex.repository.database.model.PokemonLocal
-import com.eriberto.pokedex.repository.model.PokeDetalhe
-import com.eriberto.pokedex.repository.model.PokemonData
+import com.eriberto.pokedex.repository.database.config.PokemonDatabase
+import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.repository.database.model.PokemonFavorito
+import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
+import com.eriberto.pokedex.repository.model.Pokemon
 import com.eriberto.pokedex.repository.network.PokeService
 import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
 import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel

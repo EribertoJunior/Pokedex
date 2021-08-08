@@ -20,8 +20,8 @@ val appModule = module {
     }
 
     factory { PokemonPagingSource(pokeService = get()) }
-    single { PokemonDatabase.getDatabase(androidContext()).pokemonDAO() }
-    factory<PokemonRepo> { PokemonRepoImp(pokeService = get(), pokemonDAO = get()) }
+    single<PokemonDatabase> { PokemonDatabase.getDatabase(androidContext()) }
+    factory<PokemonRepo> { PokemonRepoImp(pokeService = get(), pokemonDatabase = get()) }
 
     viewModel { ListaPokemonViewModel(pokemonRepo = get()) }
     viewModel { DetalhePokemonViewModel(pokemonRepo = get()) }

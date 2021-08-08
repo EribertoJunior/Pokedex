@@ -1,6 +1,7 @@
 package com.eriberto.pokedex.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -11,7 +12,6 @@ import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
 import com.eriberto.pokedex.repository.model.Pokemon
 import com.eriberto.pokedex.repository.network.PokeService
 import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
-import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,8 +20,10 @@ import retrofit2.Response
 
 class PokemonRepoImp(
     private val pokeService: PokeService,
-    private val pokemonDAO: PokemonDAO
+    private val pokemonDatabase: PokemonDatabase
 ) : PokemonRepo {
+
+    private val pokemonDAO = pokemonDatabase.pokemonDAO()
 
     override suspend fun buscarDetalhesDoPokemon(
         idPokemon: Int,
@@ -46,28 +48,23 @@ class PokemonRepoImp(
         })
     }
 
-    override suspend fun favoritarPokemon(pokemonData: PokemonData): Boolean {
-        val pokemonFavorito = getFavoritePokemon(pokemonData.name).value
-        val idPokemonLocal: Long = pokemonFavorito?.id ?: 0
-        val pokemonLocal = map(idPokemon = idPokemonLocal, pokemonData = pokemonData)
-        pokemonDAO.salva(pokemonLocal)
-        return true
+    override suspend fun favoritarPokemon(pokemon: EntidadePokemon) {
+        pokemonDatabase.pokemonFavoritoDAO().salvar(PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name))
+        pokemon.favorito = true
+        pokemonDAO.salva(pokemon)
     }
 
-    override suspend fun desfavoritarPokemon(pokemonData: PokemonData): Boolean {
-        val pokemonFavorito = getFavoritePokemon(pokemonData.name).value
-        val idPokemonLocal: Long = pokemonFavorito?.id ?: 0
-        pokemonDAO.deletar(
-            map(idPokemon = idPokemonLocal, pokemonData = pokemonData)
-        )
-        return true
+    override suspend fun desfavoritarPokemon(pokemon: EntidadePokemon) {
+        pokemonDatabase.pokemonFavoritoDAO().deletar(PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name))
+        pokemon.favorito = false
+        pokemonDAO.salva(pokemon)
     }
 
-    override fun isFavoritePokemon(namePokemon: String): LiveData<PokemonLocal?> {
-        return getFavoritePokemon(namePokemon)
+    override fun isFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?> {
+        return getFavoritePokemon(idPokemon)
     }
 
-    override fun getPokemonStream(): Flow<PagingData<PokemonData>> {
+    override fun getPokemonStream(): Flow<PagingData<Pokemon>> {
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,

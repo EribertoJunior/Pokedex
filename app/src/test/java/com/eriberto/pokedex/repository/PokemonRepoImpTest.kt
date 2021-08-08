@@ -1,7 +1,8 @@
 package com.eriberto.pokedex.repository
 
+import com.eriberto.pokedex.repository.database.config.PokemonDatabase
 import com.eriberto.pokedex.repository.database.config.service.PokemonDAO
-import com.eriberto.pokedex.repository.model.PokeDetalhe
+import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
 import com.eriberto.pokedex.repository.network.PokeService
 import com.eriberto.pokedex.util.Result
 import io.mockk.coVerify
@@ -15,21 +16,22 @@ import retrofit2.Callback
 class PokemonRepoImpTest {
 
     private var service: PokeService = mockk()
+    private var pokemonDatabase: PokemonDatabase = mockk()
     private var pokemonDAO: PokemonDAO = mockk()
 
-    private var resultMock = mockk<Result<PokeDetalhe>>()
+    private var resultMock = mockk<Result<RetornoPokemonDetalhe>>()
 
-    private var responseMock = mockk<retrofit2.Response<PokeDetalhe>>()
+    private var responseMock = mockk<retrofit2.Response<RetornoPokemonDetalhe>>()
 
-    private var callMock = mockk<Call<PokeDetalhe>>()
+    private var callMock = mockk<Call<RetornoPokemonDetalhe>>()
 
     @Test
     fun `deve notificar detalhes do pokemon quando resposta for bem sucedida`() {
-        val detalhePokemonRepoImp = PokemonRepoImp(service, pokemonDAO)
+        val detalhePokemonRepoImp = PokemonRepoImp(service, pokemonDatabase)
 
         every { service.getDetalhePokemon(1) } returns callMock
-        every { callMock.enqueue(any<Callback<PokeDetalhe>>()) } answers {
-            (args[0] as Callback<PokeDetalhe>).apply {
+        every { callMock.enqueue(any<Callback<RetornoPokemonDetalhe>>()) } answers {
+            (args[0] as Callback<RetornoPokemonDetalhe>).apply {
                 onResponse(callMock, responseMock)
             }
         }
@@ -48,11 +50,11 @@ class PokemonRepoImpTest {
 
     @Test
     fun `deve notificar mensagem de erro quando resposta for mal sucedida`() {
-        val detalhePokemonRepoImp = PokemonRepoImp(service, pokemonDAO)
+        val detalhePokemonRepoImp = PokemonRepoImp(service, pokemonDatabase)
 
         every { service.getDetalhePokemon(1) } returns callMock
         every { callMock.enqueue(any()) } answers {
-            (args[0] as Callback<PokeDetalhe>).apply {
+            (args[0] as Callback<RetornoPokemonDetalhe>).apply {
                 onResponse(callMock, responseMock)
             }
         }
@@ -72,11 +74,10 @@ class PokemonRepoImpTest {
 
     @Test
     fun `deve notificar mensagem de erro quando a requisicao falhar`() {
-        val detalhePokemonRepoImp = PokemonRepoImp(service, pokemonDAO)
-
+        val detalhePokemonRepoImp = PokemonRepoImp(service, pokemonDatabase)
         every { service.getDetalhePokemon(1) } returns callMock
         every { callMock.enqueue(any()) } answers {
-            (args[0] as Callback<PokeDetalhe>).apply {
+            (args[0] as Callback<RetornoPokemonDetalhe>).apply {
                 onFailure(callMock, Throwable("Error"))
             }
         }

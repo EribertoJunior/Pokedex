@@ -24,11 +24,11 @@ class PokemonRemoteMediator(
     ): MediatorResult {
         val offset = when (loadType) {
             LoadType.REFRESH -> {
-                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                val remoteKeys = obterChaveRemotaMaisProximaDaPosicaoAtual(state)
                 remoteKeys?.nextOffset?.minus(1) ?: PRIMEIRO_DESLOCAMENTO_OFFSET
             }
             LoadType.PREPEND -> {
-                val remoteKeys = getRemoteKeyForFirstItem(state)
+                val remoteKeys = obterChaveRemotaParaOPrimeiroItem(state)
                 // Se remoteKeys for nulo, significa que o resultado da atualização ainda não está no banco de dados.
                 // Podemos retornar Success com `endOfPaginationReached = false` porque Paging
                 // chamará esse método novamente se RemoteKeys se tornar não nulo.
@@ -39,7 +39,7 @@ class PokemonRemoteMediator(
                 prevKey
             }
             LoadType.APPEND -> {
-                val remoteKeys = getRemoteKeyForLastItem(state)
+                val remoteKeys = obterChaveRemotaParaUltimoItem(state)
                 // Se remoteKeys for nulo, significa que o resultado da atualização ainda não está no banco de dados.
                 // Podemos retornar Success com endOfPaginationReached = false porque Paging
                 // chamará esse método novamente se RemoteKeys se tornar não nulo.
@@ -57,10 +57,10 @@ class PokemonRemoteMediator(
             val endOfPaginationReached = listaPokemon.isEmpty()
 
             pokemonDatabase.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    pokemonDatabase.pokemonDAO().limparFavoritos()
-                    pokemonDatabase.chavesRemotasDAO().clearRemoteKeys()
-                }
+//                if (loadType == LoadType.REFRESH) {
+//                    pokemonDatabase.pokemonDAO().limparFavoritos()
+//                    pokemonDatabase.chavesRemotasDAO().clearRemoteKeys()
+//                }
 
                 val prevKey = if (offset == PRIMEIRO_DESLOCAMENTO_OFFSET) null else offset - 10
                 val nextKey = if (endOfPaginationReached) null else offset + 10
@@ -90,7 +90,7 @@ class PokemonRemoteMediator(
         return regex.find(urlPokemon)?.value?.replace("/","")?.toInt() ?: 0
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, EntidadePokemon>): ChaveRemota? {
+    private suspend fun obterChaveRemotaParaOPrimeiroItem(state: PagingState<Int, EntidadePokemon>): ChaveRemota? {
         // Obtenha a primeira página que foi recuperada, que continha itens.
         // Nessa primeira página, pegue o primeiro item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
@@ -100,7 +100,7 @@ class PokemonRemoteMediator(
             }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(
+    private suspend fun obterChaveRemotaMaisProximaDaPosicaoAtual(
         state: PagingState<Int, EntidadePokemon>
     ): ChaveRemota? {
         // A biblioteca de paginação está tentando carregar dados após a posição da âncora
@@ -112,7 +112,7 @@ class PokemonRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, EntidadePokemon>): ChaveRemota? {
+    private suspend fun obterChaveRemotaParaUltimoItem(state: PagingState<Int, EntidadePokemon>): ChaveRemota? {
         // Obtenha a última página que foi recuperada, que continha itens.
         // A partir dessa última página, pegue o último item
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()

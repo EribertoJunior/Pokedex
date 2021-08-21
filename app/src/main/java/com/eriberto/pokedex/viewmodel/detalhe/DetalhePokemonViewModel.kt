@@ -54,6 +54,6 @@ class DetalhePokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel(
     }
 
     fun isFavorite(idPokemon: Int): LiveData<PokemonFavorito?> {
-        return pokemonRepo.isFavoritePokemon(idPokemon)
+        return pokemonRepo.buscaPokemonFavoritoPorId(idPokemon)
     }
 }

@@ -1,5 +1,7 @@
 package com.eriberto.pokedex.di
 
+import androidx.paging.ExperimentalPagingApi
+import com.eriberto.pokedex.repository.PokemonRemoteMediator
 import com.eriberto.pokedex.repository.PokemonRepo
 import com.eriberto.pokedex.repository.PokemonRepoImp
 import com.eriberto.pokedex.repository.database.config.PokemonDatabase
@@ -13,6 +15,7 @@ import org.koin.dsl.module
 
 const val PROPERTY_BASE_URL = "PROPERTY_BASE_URL"
 
+@ExperimentalPagingApi
 val appModule = module {
     single {
         val baseUrl = getProperty(PROPERTY_BASE_URL)
@@ -20,8 +23,15 @@ val appModule = module {
     }
 
     factory { PokemonPagingSource(pokeService = get()) }
-    single<PokemonDatabase> { PokemonDatabase.getDatabase(androidContext()) }
-    factory<PokemonRepo> { PokemonRepoImp(pokeService = get(), pokemonDatabase = get()) }
+
+    single { PokemonDatabase.getDatabase(androidContext()) }
+    single { get<PokemonDatabase>().pokemonDAO() }
+    single { get<PokemonDatabase>().pokemonFavoritoDAO() }
+    single { get<PokemonDatabase>().chavesRemotasDAO() }
+
+    factory { PokemonRemoteMediator(pokeService = get(), pokemonDAO = get(),chavesRemotasDAO = get(),pokemonFavoritoDAO = get()) }
+
+    factory<PokemonRepo> { PokemonRepoImp(pokeService = get(), pokemonFavoritoDAO = get(), pokemonRemoteMediator = get(),pokemonDAO = get()) }
 
     viewModel { ListaPokemonViewModel(pokemonRepo = get()) }
     viewModel { DetalhePokemonViewModel(pokemonRepo = get()) }

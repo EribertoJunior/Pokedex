@@ -8,7 +8,7 @@ import java.io.Serializable
 data class EntidadePokemon(
     @PrimaryKey
     var id: Int = 0,
-    val name: String,
-    val url: String,
+    var name: String,
+    var url: String,
     var favorito: Boolean = false
 ): Serializable

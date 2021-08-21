@@ -5,11 +5,12 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.eriberto.pokedex.repository.database.config.PokemonDatabase
+import com.eriberto.pokedex.repository.database.config.service.PokemonDAO
+import com.eriberto.pokedex.repository.database.config.service.PokemonFavoritoDAO
 import com.eriberto.pokedex.repository.database.model.EntidadePokemon
 import com.eriberto.pokedex.repository.database.model.PokemonFavorito
-import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
 import com.eriberto.pokedex.repository.model.Pokemon
+import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
 import com.eriberto.pokedex.repository.network.PokeService
 import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
 import kotlinx.coroutines.flow.Flow
@@ -18,9 +19,11 @@ import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
 
-class PokemonRepoImp(
+class PokemonRepoImp @ExperimentalPagingApi constructor(
     private val pokeService: PokeService,
-    private val pokemonDatabase: PokemonDatabase
+    private val pokemonDAO: PokemonDAO,
+    private val pokemonFavoritoDAO: PokemonFavoritoDAO,
+    private val pokemonRemoteMediator: PokemonRemoteMediator
 ) : PokemonRepo {
 
     override suspend fun buscarDetalhesDoPokemon(
@@ -47,18 +50,33 @@ class PokemonRepoImp(
     }
 
     override suspend fun favoritarPokemon(pokemon: EntidadePokemon) {
-        pokemonDatabase.pokemonFavoritoDAO().salvar(PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name))
+        val pokemonFavorito = PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name)
+
+        salvaPokemonFavorito(pokemonFavorito)
         pokemon.favorito = true
-        pokemonDatabase.pokemonDAO().salva(pokemon)
+        salvaEntidadePokemon(pokemon)
     }
 
     override suspend fun desfavoritarPokemon(pokemon: EntidadePokemon) {
-        pokemonDatabase.pokemonFavoritoDAO().deletar(PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name))
+        val pokemonFavorito = PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name)
+        deletaPokemonFavorito(pokemonFavorito)
         pokemon.favorito = false
-        pokemonDatabase.pokemonDAO().salva(pokemon)
+        salvaEntidadePokemon(pokemon)
     }
 
-    override fun isFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?> {
+    fun deletaPokemonFavorito(pokemonFavorito: PokemonFavorito) {
+        pokemonFavoritoDAO.deletar(pokemonFavorito)
+    }
+
+    fun salvaPokemonFavorito(pokemonFavorito: PokemonFavorito) {
+        pokemonFavoritoDAO.salvar(pokemonFavorito)
+    }
+
+    fun salvaEntidadePokemon(pokemon: EntidadePokemon) {
+        pokemonDAO.salva(pokemon)
+    }
+
+    override fun buscaPokemonFavoritoPorId(idPokemon: Int): LiveData<PokemonFavorito?> {
         return getFavoritePokemon(idPokemon)
     }
 
@@ -82,15 +100,12 @@ class PokemonRepoImp(
                 maxSize = MAX_SIZE,
                 enablePlaceholders = false
             ),
-            remoteMediator = PokemonRemoteMediator(
-                pokeService = pokeService,
-                pokemonDatabase = pokemonDatabase
-            ),
-            pagingSourceFactory = { pokemonDatabase.pokemonDAO().buscarPaginadaPokemon() }).flow
+            remoteMediator = pokemonRemoteMediator,
+            pagingSourceFactory = { pokemonDAO.buscarPaginadaPokemon() }).flow
     }
 
     private fun getFavoritePokemon(idPokemon: Int): LiveData<PokemonFavorito?> {
-        return pokemonDatabase.pokemonFavoritoDAO().verificaFavorito(idPokemon)
+        return pokemonFavoritoDAO.verificaFavorito(idPokemon)
     }
 
     companion object {

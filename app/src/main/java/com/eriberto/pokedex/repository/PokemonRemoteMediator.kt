@@ -4,18 +4,25 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
-import com.eriberto.pokedex.repository.database.config.PokemonDatabase
+import com.eriberto.pokedex.repository.database.config.service.ChavesRemotasDAO
+import com.eriberto.pokedex.repository.database.config.service.PokemonDAO
+import com.eriberto.pokedex.repository.database.config.service.PokemonFavoritoDAO
 import com.eriberto.pokedex.repository.database.model.ChaveRemota
 import com.eriberto.pokedex.repository.database.model.EntidadePokemon
 import com.eriberto.pokedex.repository.network.PokeService
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
 @ExperimentalPagingApi
 class PokemonRemoteMediator(
     private val pokeService: PokeService,
-    private val pokemonDatabase: PokemonDatabase
+    private val pokemonDAO: PokemonDAO,
+    private val chavesRemotasDAO: ChavesRemotasDAO,
+    private val pokemonFavoritoDAO: PokemonFavoritoDAO
+
 ) : RemoteMediator<Int, EntidadePokemon>() {
 
     override suspend fun load(
@@ -56,26 +63,28 @@ class PokemonRemoteMediator(
             val listaPokemon = apiResponse.results
             val endOfPaginationReached = listaPokemon.isEmpty()
 
-            pokemonDatabase.withTransaction {
-//                if (loadType == LoadType.REFRESH) {
+            coroutineScope {
+                withContext(IO){
+//                if (loadType == LoadType.REFRESH) { // se o aplicativo foi aberto
 //                    pokemonDatabase.pokemonDAO().limparFavoritos()
 //                    pokemonDatabase.chavesRemotasDAO().clearRemoteKeys()
 //                }
 
-                val prevKey = if (offset == PRIMEIRO_DESLOCAMENTO_OFFSET) null else offset - 10
-                val nextKey = if (endOfPaginationReached) null else offset + 10
+                    val prevKey = if (offset == PRIMEIRO_DESLOCAMENTO_OFFSET) null else offset - 10
+                    val nextKey = if (endOfPaginationReached) null else offset + 10
 
-                val entidades = listaPokemon.map {
-                    val idPokemon = getIdPokemon(it.url)
-                    val pokemonFavoritoEncontrado = pokemonDatabase.pokemonFavoritoDAO().buscarFavorito(idPokemon)
+                    val entidades = listaPokemon.map {
+                        val idPokemon = getIdPokemon(it.url)
+                        val pokemonFavoritoEncontrado = pokemonFavoritoDAO.buscarFavorito(idPokemon)
 
-                    EntidadePokemon(id = idPokemon, name = it.name, url = it.url, favorito = pokemonFavoritoEncontrado != null)
+                        EntidadePokemon(id = idPokemon, name = it.name, url = it.url, favorito = pokemonFavoritoEncontrado != null)
+                    }
+                    val chavesRemotas = listaPokemon.map {
+                        ChaveRemota(nomePokemon = it.name, nextOffset = nextKey, prevOffset = prevKey)
+                    }
+                    chavesRemotasDAO.insertAll(chavesRemotas)
+                    pokemonDAO.salvarTodos(entidades)
                 }
-                val chavesRemotas = listaPokemon.map {
-                    ChaveRemota(nomePokemon = it.name, nextOffset = nextKey, prevOffset = prevKey)
-                }
-                pokemonDatabase.chavesRemotasDAO().insertAll(chavesRemotas)
-                pokemonDatabase.pokemonDAO().salvarTodos(entidades)
             }
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
@@ -96,7 +105,7 @@ class PokemonRemoteMediator(
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { pokemon ->
                 // Obtenha as chaves remotas dos primeiros itens recuperados
-                pokemonDatabase.chavesRemotasDAO().remoteKeysPokemonName(pokemon.name)
+                chavesRemotasDAO.remoteKeysPokemonName(pokemon.name)
             }
     }
 
@@ -107,7 +116,7 @@ class PokemonRemoteMediator(
         // Obtenha o item mais próximo da posição âncora
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.name?.let { nomePokemon ->
-                pokemonDatabase.chavesRemotasDAO().remoteKeysPokemonName(nomePokemon)
+                chavesRemotasDAO.remoteKeysPokemonName(nomePokemon)
             }
         }
     }
@@ -118,7 +127,7 @@ class PokemonRemoteMediator(
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { pokemon ->
                 // Obtenha as chaves remotas do último item recuperado
-                pokemonDatabase.chavesRemotasDAO().remoteKeysPokemonName(pokemon.name)
+                chavesRemotasDAO.remoteKeysPokemonName(pokemon.name)
             }
     }
 

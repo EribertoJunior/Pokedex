@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -46,19 +47,7 @@ class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
             btDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item) }
             shimerConteiner.startShimmer()
 
-            if (item.favorito){
-                ivEstrela.apply {
-                    setImageResource(R.drawable.star)
-                    imageTintList =
-                        ContextCompat.getColorStateList(ivEstrela.context, R.color.yellow)
-                }
-            }else{
-                ivEstrela.apply {
-                    setImageResource(R.drawable.star_outline)
-                    imageTintList =
-                        ContextCompat.getColorStateList(ivEstrela.context, R.color.black)
-                }
-            }
+            ivEstrela.isVisible = item.favorito
 
             Glide.with(ivPokemon)
                 .load(ivPokemon.context.getString(R.string.url_imagem, getIdPokemon(item.url)))

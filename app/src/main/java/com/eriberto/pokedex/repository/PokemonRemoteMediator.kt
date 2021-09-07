@@ -22,7 +22,6 @@ class PokemonRemoteMediator(
     private val pokemonDAO: PokemonDAO,
     private val chavesRemotasDAO: ChavesRemotasDAO,
     private val pokemonFavoritoDAO: PokemonFavoritoDAO
-
 ) : RemoteMediator<Int, EntidadePokemon>() {
 
     override suspend fun load(

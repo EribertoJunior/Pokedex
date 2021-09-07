@@ -51,8 +51,9 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/star_outline"
-            android:contentDescription="@string/imagem_simbolo_de_favorito" />
+            app:srcCompat="@drawable/star"
+            android:contentDescription="@string/imagem_simbolo_de_favorito"
+            app:tint="@color/yellow" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btDetalhesPokemon"

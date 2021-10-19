@@ -19,6 +19,7 @@ import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
 
+@ExperimentalPagingApi
 class PokemonRepoImp @ExperimentalPagingApi constructor(
     private val pokeService: PokeService,
     private val pokemonDAO: PokemonDAO,
@@ -91,7 +92,6 @@ class PokemonRepoImp @ExperimentalPagingApi constructor(
             pagingSourceFactory = { PokemonPagingSource(pokeService) }).flow
     }
 
-    @ExperimentalPagingApi
     override fun getPokemonStreamDB(): Flow<PagingData<EntidadePokemon>> {
         return Pager(
             config = PagingConfig(

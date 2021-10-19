@@ -51,8 +51,7 @@ class PokemonRepoImpTest {
         runBlocking { pokemonRepo.buscarDetalhesDoPokemon(1, success, erro = { }) }
         coVerify { success(responseRetornoPokemonDetalheMock.body()!!) }
     }
-
-
+    
     @Test
     fun `deve notificar mensagem de erro quando a resposta da requisicao de detalhes do pokemon for mal sucedida`() {
         val responseRetornoPokemonDetalheMock: Response<RetornoPokemonDetalhe> = mockk()

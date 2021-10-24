@@ -50,14 +50,6 @@ class PokemonRepoImp @ExperimentalPagingApi constructor(
         })
     }
 
-    override suspend fun favoritarPokemon(pokemon: EntidadePokemon) {
-        val pokemonFavorito = PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name)
-
-        salvaPokemonFavorito(pokemonFavorito)
-        pokemon.favorito = true
-        salvaEntidadePokemon(pokemon)
-    }
-
     override suspend fun favoritarPokemon(idPokemon: Int, nomePokemon: String) {
         val pokemonFavorito = PokemonFavorito(idPokemon = idPokemon, nomePokemon = nomePokemon)
         val entidadePokemon = getEntidadePokemon(nomePokemon)
@@ -81,13 +73,6 @@ class PokemonRepoImp @ExperimentalPagingApi constructor(
     }
 
     private fun getEntidadePokemon(nomePokemon: String) = pokemonDAO.getEntidadePokemon(nomePokemon)
-
-    override suspend fun desfavoritarPokemon(pokemon: EntidadePokemon) {
-        val pokemonFavorito = PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name)
-        deletaPokemonFavorito(pokemonFavorito)
-        pokemon.favorito = false
-        salvaEntidadePokemon(pokemon)
-    }
 
     fun deletaPokemonFavorito(pokemonFavorito: PokemonFavorito) = pokemonFavoritoDAO.deletar(pokemonFavorito)
 

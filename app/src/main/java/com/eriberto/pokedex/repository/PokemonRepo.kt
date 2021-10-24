@@ -15,11 +15,7 @@ interface PokemonRepo {
         erro: (errorMessage: String) -> Unit
     )
 
-    suspend fun favoritarPokemon(pokemon: EntidadePokemon)
-
     suspend fun favoritarPokemon(idPokemon: Int, nomePokemon: String)
-
-    suspend fun desfavoritarPokemon(pokemon: EntidadePokemon)
 
     suspend fun desfavoritarPokemon(idPokemon: Int, nomePokemon: String)
 

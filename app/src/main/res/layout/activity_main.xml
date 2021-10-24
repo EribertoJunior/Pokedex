@@ -4,45 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.main.ListaPokemonActivity">
+    tools:context=".view.MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarMain"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:title="@string/app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/progressBarListaPokemon"
-        style="?android:attr/progressBarStyleHorizontal"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        app:layout_constraintEnd_toEndOf="@+id/toolbarMain"
-        app:layout_constraintStart_toStartOf="@+id/toolbarMain"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarMain" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewListaPokemon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarMain"
-        android:layout_marginTop="?attr/actionBarSize"
-        tools:listitem="@layout/poke_data_item"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
 
-    <include
-        android:id="@+id/tela_de_falha"
-        layout="@layout/falha_no_carregamento"
-        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,11 +13,11 @@ interface PokemonDAO {
     @Query("SELECT * FROM EntidadePokemon")
     fun buscarTodos(): List<EntidadePokemon>
 
+    @Query("SELECT * FROM EntidadePokemon WHERE name = :nomePokemon")
+    fun getEntidadePokemon(nomePokemon: String): EntidadePokemon?
+
     @Delete
     fun deletar(entidadePokemon: EntidadePokemon)
-
-    @Query("SELECT * FROM EntidadePokemon WHERE name = :nomePokemon")
-    fun verificarPokemonLocal(nomePokemon: String): LiveData<EntidadePokemon?>
 
     @Query("DELETE FROM EntidadePokemon")
     suspend fun limparFavoritos()

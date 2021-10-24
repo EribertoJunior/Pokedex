@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ctg_bg"
-    tools:context=".view.detalhe.DetalhePokemonActivity">
+    android:background="@drawable/ctg_bg">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -62,7 +61,8 @@
         android:padding="20dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <include layout="@layout/detalhes_pokemon"/>
+        <include android:id="@+id/detalhes_pokemon_container"
+            layout="@layout/detalhes_pokemon"/>
 
     </androidx.core.widget.NestedScrollView>
 

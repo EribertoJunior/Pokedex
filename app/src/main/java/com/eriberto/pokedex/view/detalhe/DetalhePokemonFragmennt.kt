@@ -18,6 +18,7 @@ import com.eriberto.pokedex.repository.network.STATUS_RESULT
 import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
 import com.eriberto.pokedex.viewmodel.detalhe.model.PokeDetalheData
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetalhePokemonFragmennt : Fragment() {
@@ -26,11 +27,11 @@ class DetalhePokemonFragmennt : Fragment() {
     private val binding get() = _binding!!
 
     private val arguments by navArgs<DetalhePokemonFragmenntArgs>()
-
     private val idPokemon by lazy { arguments.idPokemon }
     private val nomePokemon by lazy { arguments.nomePokemon }
 
     private val viewModel: DetalhePokemonViewModel by viewModel()
+    private val tipoPokemonAdapter: TipoPokemonAdapter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +57,7 @@ class DetalhePokemonFragmennt : Fragment() {
         ViewCompat.setTransitionName(binding.ivPokemonDetalhe, CHAVE_IMAGE_POKEMON_DETALHE)
         showNamePokemon()
         showImagePokemon()
+        configRecyclerView()
     }
 
     private fun showImagePokemon() {
@@ -100,27 +102,41 @@ class DetalhePokemonFragmennt : Fragment() {
         esconderProgressBar()
 
         retornoPokemonDetalhe?.let {
-            var abilitiesNames = ""
-            val tamanhoDaLista = it.abilities.size - 1
-            it.abilities.forEachIndexed { index, abilitySlot ->
-                abilitiesNames += abilitySlot.ability.name
-                if (index < tamanhoDaLista) {
-                    abilitiesNames += "\n"
-                }
-            }
-
+            val abilitiesNames = preparaListaDeHabilidades(it)
 
             binding.detalhesPokemonContainer.apply {
                 tvHabilidade.text = abilitiesNames
-                tvAltura.text = (it.height / 10).toString().plus(" m")
-                tvPeso.text = (it.weight / 10).toString().plus(" kg")
+                tvAltura.text = calculaAlturaDoPokemon(it.height)
+                tvPeso.text = calculaPesoDoPokemon(it.weight)
                 tvTitleAbilities.text =
                     resources.getQuantityText(R.plurals.habilidades, it.abilities.size)
 
-                recyclerViewTipoPokemon.apply {
-                    adapter = TipoPokemonAdapter(retornoPokemonDetalhe.types)
-                }
+                tipoPokemonAdapter.submitData(retornoPokemonDetalhe.types)
             }
+        }
+    }
+
+    private fun calculaPesoDoPokemon(peso: Double) =
+        (peso / 10).toString().plus(" kg")
+
+    private fun calculaAlturaDoPokemon(altura: Double) =
+        (altura / 10).toString().plus(" m")
+
+    private fun preparaListaDeHabilidades(it: RetornoPokemonDetalhe): String {
+        var abilitiesNames = ""
+        val tamanhoDaLista = it.abilities.size - 1
+        it.abilities.forEachIndexed { index, abilitySlot ->
+            abilitiesNames += abilitySlot.ability.name
+            if (index < tamanhoDaLista) {
+                abilitiesNames += "\n"
+            }
+        }
+        return abilitiesNames
+    }
+
+    private fun configRecyclerView() {
+        binding.detalhesPokemonContainer.recyclerViewTipoPokemon.apply {
+            adapter = tipoPokemonAdapter
         }
     }
 

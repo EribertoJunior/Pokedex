@@ -1,4 +1,4 @@
-package com.eriberto.pokedex.view.main
+package com.eriberto.pokedex.view.lista
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -22,8 +22,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ListaPokemonActivityTest {
 
-    @get:Rule
-    val activity = ActivityScenarioRule(ListaPokemonActivity::class.java)
+    //@get:Rule
+    //val activity = ActivityScenarioRule(ListaPokemonActivity::class.java)
 
     lateinit var mockWebServer: MockWebServer
 

@@ -11,10 +11,13 @@ import com.eriberto.pokedex.R
 import com.eriberto.pokedex.repository.model.Type
 import com.eriberto.pokedex.repository.model.TypeSlot
 
-class TipoPokemonAdapter(private var listTypeSlot: List<TypeSlot>) : RecyclerView.Adapter<TipoPokemonAdapter.TipoPokemonViewHolder>() {
+class TipoPokemonAdapter : RecyclerView.Adapter<TipoPokemonAdapter.TipoPokemonViewHolder>() {
+
+    private var listTypeSlot: MutableList<TypeSlot> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TipoPokemonViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.type_pokemon_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.type_pokemon_item, parent, false)
         return TipoPokemonViewHolder(view)
     }
 
@@ -26,13 +29,18 @@ class TipoPokemonAdapter(private var listTypeSlot: List<TypeSlot>) : RecyclerVie
 
     override fun getItemCount(): Int = listTypeSlot.size
 
+    fun submitData(types: List<TypeSlot>) {
+        listTypeSlot.addAll(types)
+        notifyDataSetChanged()
+    }
+
     inner class TipoPokemonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val imageType: ImageView = view.findViewById(R.id.imageView_type)
 
         fun bind(item: TypeSlot) {
             val context = imageType.context
             val idDrawable: Int = getDrawableId(context, item.type)
-            val backgroundColorId: Int? = getBackgroundColorId(item)
+            val backgroundColorId: Int? = getColorId(context, item)
 
             imageType.apply {
                 backgroundColorId?.let {
@@ -42,12 +50,24 @@ class TipoPokemonAdapter(private var listTypeSlot: List<TypeSlot>) : RecyclerVie
             }
         }
 
-        private fun getBackgroundColorId(item: TypeSlot): Int? {
-            return item.type.name?.let { POKEMON_TYPE.getType(it).backgroundColorId }
+        private fun getColorId(context: Context, item: TypeSlot): Int? {
+            return item.type.name?.let { getResourceColor(context, it) }
         }
 
         private fun getDrawableId(context: Context, item: Type): Int {
-            return context.resources.getIdentifier("ic_${item.name}", "drawable", context.packageName)
+            return context.resources.getIdentifier(
+                "ic_${item.name}",
+                "drawable",
+                context.packageName
+            )
+        }
+
+        private fun getResourceColor(context: Context, colorName: String): Int {
+            return context.resources.getIdentifier(
+                colorName,
+                "color",
+                context.packageName
+            )
         }
     }
 }

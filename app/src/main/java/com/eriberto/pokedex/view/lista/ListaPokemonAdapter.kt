@@ -21,7 +21,6 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.button.MaterialButton
 
 class ListaPokemonAdapter(
-    //private val onClickListener: OnClickListener,
     var onItemClickListener: (idPokemon: Int, nomePokemon: String, extras: FragmentNavigator.Extras) -> Unit = { _, _, _ -> }
 ) :
     PagingDataAdapter<EntidadePokemon, ListaPokemonAdapter.MeuViewHolder>(POKEMON_COMPARATOR) {

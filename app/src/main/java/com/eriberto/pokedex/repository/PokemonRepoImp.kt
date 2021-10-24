@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.eriberto.pokedex.data.PokemonRemoteMediator
 import com.eriberto.pokedex.repository.database.config.service.PokemonDAO
 import com.eriberto.pokedex.repository.database.config.service.PokemonFavoritoDAO
 import com.eriberto.pokedex.repository.database.model.EntidadePokemon
@@ -74,9 +75,11 @@ class PokemonRepoImp @ExperimentalPagingApi constructor(
 
     fun getEntidadePokemon(nomePokemon: String) = pokemonDAO.getEntidadePokemon(nomePokemon)
 
-    fun deletaPokemonFavorito(pokemonFavorito: PokemonFavorito) = pokemonFavoritoDAO.deletar(pokemonFavorito)
+    fun deletaPokemonFavorito(pokemonFavorito: PokemonFavorito) =
+        pokemonFavoritoDAO.deletar(pokemonFavorito)
 
-    fun salvaPokemonFavorito(pokemonFavorito: PokemonFavorito) = pokemonFavoritoDAO.salvar(pokemonFavorito)
+    fun salvaPokemonFavorito(pokemonFavorito: PokemonFavorito) =
+        pokemonFavoritoDAO.salvar(pokemonFavorito)
 
     fun salvaEntidadePokemon(pokemon: EntidadePokemon) = pokemonDAO.salva(pokemon)
 

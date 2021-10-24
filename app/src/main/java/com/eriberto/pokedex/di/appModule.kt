@@ -1,12 +1,13 @@
 package com.eriberto.pokedex.di
 
 import androidx.paging.ExperimentalPagingApi
-import com.eriberto.pokedex.repository.PokemonRemoteMediator
+import com.eriberto.pokedex.data.PokemonRemoteMediator
 import com.eriberto.pokedex.repository.PokemonRepo
 import com.eriberto.pokedex.repository.PokemonRepoImp
 import com.eriberto.pokedex.repository.database.config.PokemonDatabase
 import com.eriberto.pokedex.repository.network.RetroConfig
 import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
+import com.eriberto.pokedex.view.detalhe.TipoPokemonAdapter
 import com.eriberto.pokedex.view.lista.ListaPokemonAdapter
 import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
@@ -48,6 +49,7 @@ val appModule = module {
     }
 
     factory { ListaPokemonAdapter() }
+    factory { TipoPokemonAdapter() }
 
     viewModel { ListaPokemonViewModel(pokemonRepo = get()) }
     viewModel { DetalhePokemonViewModel(pokemonRepo = get()) }

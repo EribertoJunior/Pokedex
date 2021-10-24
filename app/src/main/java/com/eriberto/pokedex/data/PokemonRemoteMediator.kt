@@ -1,4 +1,4 @@
-package com.eriberto.pokedex.repository
+package com.eriberto.pokedex.data
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType

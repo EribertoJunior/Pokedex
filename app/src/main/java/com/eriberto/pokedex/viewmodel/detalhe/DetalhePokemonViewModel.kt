@@ -41,15 +41,15 @@ class DetalhePokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel(
         }
     }
 
-    fun favoritarPokemon(pokemon: EntidadePokemon) {
+    fun favoritarPokemon(idPokemon: Int, nomePokemon: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            pokemonRepo.favoritarPokemon(pokemon)
+            pokemonRepo.favoritarPokemon(idPokemon = idPokemon, nomePokemon = nomePokemon)
         }
     }
 
-    fun desfavoritarPokemon(pokemon: EntidadePokemon) {
+    fun desfavoritarPokemon(idPokemon: Int, nomePokemon: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            pokemonRepo.desfavoritarPokemon(pokemon)
+            pokemonRepo.desfavoritarPokemon(idPokemon = idPokemon, nomePokemon = nomePokemon)
         }
     }
 

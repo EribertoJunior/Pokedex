@@ -7,6 +7,7 @@ import com.eriberto.pokedex.repository.PokemonRepoImp
 import com.eriberto.pokedex.repository.database.config.PokemonDatabase
 import com.eriberto.pokedex.repository.network.RetroConfig
 import com.eriberto.pokedex.repository.pagingSource.PokemonPagingSource
+import com.eriberto.pokedex.view.lista.ListaPokemonAdapter
 import com.eriberto.pokedex.viewmodel.ListaPokemonViewModel
 import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
 import org.koin.android.ext.koin.androidContext
@@ -29,9 +30,24 @@ val appModule = module {
     single { get<PokemonDatabase>().pokemonFavoritoDAO() }
     single { get<PokemonDatabase>().chavesRemotasDAO() }
 
-    factory { PokemonRemoteMediator(pokeService = get(), pokemonDAO = get(),chavesRemotasDAO = get(),pokemonFavoritoDAO = get()) }
+    factory {
+        PokemonRemoteMediator(
+            pokeService = get(),
+            pokemonDAO = get(),
+            chavesRemotasDAO = get(),
+            pokemonFavoritoDAO = get()
+        )
+    }
+    factory<PokemonRepo> {
+        PokemonRepoImp(
+            pokeService = get(),
+            pokemonFavoritoDAO = get(),
+            pokemonRemoteMediator = get(),
+            pokemonDAO = get()
+        )
+    }
 
-    factory<PokemonRepo> { PokemonRepoImp(pokeService = get(), pokemonFavoritoDAO = get(), pokemonRemoteMediator = get(),pokemonDAO = get()) }
+    factory { ListaPokemonAdapter() }
 
     viewModel { ListaPokemonViewModel(pokemonRepo = get()) }
     viewModel { DetalhePokemonViewModel(pokemonRepo = get()) }

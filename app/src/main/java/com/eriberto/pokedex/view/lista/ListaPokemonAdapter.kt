@@ -1,12 +1,14 @@
-package com.eriberto.pokedex.view.main
+package com.eriberto.pokedex.view.lista
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,10 +16,14 @@ import com.bumptech.glide.Glide
 import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.R
 import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.view.detalhe.DetalhePokemonFragmennt.Companion.CHAVE_IMAGE_POKEMON_DETALHE
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.button.MaterialButton
 
-class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
+class ListaPokemonAdapter(
+    //private val onClickListener: OnClickListener,
+    var onItemClickListener: (idPokemon: Int, nomePokemon: String, extras: FragmentNavigator.Extras) -> Unit = { _, _, _ -> }
+) :
     PagingDataAdapter<EntidadePokemon, ListaPokemonAdapter.MeuViewHolder>(POKEMON_COMPARATOR) {
 
     override fun onBindViewHolder(holder: MeuViewHolder, position: Int) {
@@ -32,7 +38,7 @@ class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
 
     private fun getIdPokemon(urlPokemon: String): Int {
         val regex = "/\\d+".toRegex()
-        return regex.find(urlPokemon)?.value?.replace("/","")?.toInt() ?: 0
+        return regex.find(urlPokemon)?.value?.replace("/", "")?.toInt() ?: 0
     }
 
     inner class MeuViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -42,9 +48,27 @@ class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
         private val ivEstrela = view.findViewById<ImageView>(R.id.ivEstrela)
 
         private val shimerConteiner = view.findViewById<ShimmerFrameLayout>(R.id.shimerConteiner)
+
+        private lateinit var entidadePokemon: EntidadePokemon
+
+        init {
+            btDetalhesPokemon.setOnClickListener {
+                if (::entidadePokemon.isInitialized) {
+                    val extras = FragmentNavigatorExtras(ivPokemon to CHAVE_IMAGE_POKEMON_DETALHE)
+                    onItemClickListener(
+                        getIdPokemon(entidadePokemon.url),
+                        entidadePokemon.name,
+                        extras
+                    )
+                }
+            }
+        }
+
         fun bind(item: EntidadePokemon) {
+            entidadePokemon = item
             tvNomePokemon.text = item.name
-            btDetalhesPokemon.setOnClickListener { onClickListener.itemClick(getIdPokemon(item.url), item) }
+            ViewCompat.setTransitionName(ivPokemon, item.name)
+
             shimerConteiner.startShimmer()
 
             ivEstrela.isVisible = item.favorito
@@ -52,19 +76,27 @@ class ListaPokemonAdapter(private val onClickListener: OnClickListener) :
             Glide.with(ivPokemon)
                 .load(ivPokemon.context.getString(R.string.url_imagem, getIdPokemon(item.url)))
                 .placeholder(R.mipmap.pokeball_loading)
+                .centerInside()
                 .error(R.mipmap.pokeboll_error)
                 .listener(GlideResquestListener(shimerConteiner))
                 .into(ivPokemon)
         }
     }
 
-    companion object{
+    companion object {
         private val POKEMON_COMPARATOR = object : DiffUtil.ItemCallback<EntidadePokemon>() {
 
-            override fun areItemsTheSame(oldItem: EntidadePokemon, newItem: EntidadePokemon): Boolean {
+            override fun areItemsTheSame(
+                oldItem: EntidadePokemon,
+                newItem: EntidadePokemon
+            ): Boolean {
                 return oldItem.name == newItem.name
             }
-            override fun areContentsTheSame(oldItem: EntidadePokemon, newItem: EntidadePokemon): Boolean {
+
+            override fun areContentsTheSame(
+                oldItem: EntidadePokemon,
+                newItem: EntidadePokemon
+            ): Boolean {
                 return oldItem == newItem
             }
         }

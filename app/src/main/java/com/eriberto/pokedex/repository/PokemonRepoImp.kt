@@ -50,32 +50,35 @@ class PokemonRepoImp @ExperimentalPagingApi constructor(
         })
     }
 
-    override suspend fun favoritarPokemon(pokemon: EntidadePokemon) {
-        val pokemonFavorito = PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name)
+    override suspend fun favoritarPokemon(idPokemon: Int, nomePokemon: String) {
+        val pokemonFavorito = PokemonFavorito(idPokemon = idPokemon, nomePokemon = nomePokemon)
+        val entidadePokemon = getEntidadePokemon(nomePokemon)
 
         salvaPokemonFavorito(pokemonFavorito)
-        pokemon.favorito = true
-        salvaEntidadePokemon(pokemon)
+        entidadePokemon?.let { pokemon ->
+            pokemon.favorito = true
+            salvaEntidadePokemon(pokemon)
+        }
     }
 
-    override suspend fun desfavoritarPokemon(pokemon: EntidadePokemon) {
-        val pokemonFavorito = PokemonFavorito(idPokemon = pokemon.id, nomePokemon = pokemon.name)
+    override suspend fun desfavoritarPokemon(idPokemon: Int, nomePokemon: String) {
+        val pokemonFavorito = PokemonFavorito(idPokemon = idPokemon, nomePokemon = nomePokemon)
+        val entidadePokemon = getEntidadePokemon(nomePokemon)
+
         deletaPokemonFavorito(pokemonFavorito)
-        pokemon.favorito = false
-        salvaEntidadePokemon(pokemon)
+        entidadePokemon?.let { pokemon ->
+            pokemon.favorito = false
+            salvaEntidadePokemon(pokemon)
+        }
     }
 
-    fun deletaPokemonFavorito(pokemonFavorito: PokemonFavorito) {
-        pokemonFavoritoDAO.deletar(pokemonFavorito)
-    }
+    fun getEntidadePokemon(nomePokemon: String) = pokemonDAO.getEntidadePokemon(nomePokemon)
 
-    fun salvaPokemonFavorito(pokemonFavorito: PokemonFavorito) {
-        pokemonFavoritoDAO.salvar(pokemonFavorito)
-    }
+    fun deletaPokemonFavorito(pokemonFavorito: PokemonFavorito) = pokemonFavoritoDAO.deletar(pokemonFavorito)
 
-    fun salvaEntidadePokemon(pokemon: EntidadePokemon) {
-        pokemonDAO.salva(pokemon)
-    }
+    fun salvaPokemonFavorito(pokemonFavorito: PokemonFavorito) = pokemonFavoritoDAO.salvar(pokemonFavorito)
+
+    fun salvaEntidadePokemon(pokemon: EntidadePokemon) = pokemonDAO.salva(pokemon)
 
     override fun buscaPokemonFavoritoPorId(idPokemon: Int): LiveData<PokemonFavorito?> {
         return getFavoritePokemon(idPokemon)

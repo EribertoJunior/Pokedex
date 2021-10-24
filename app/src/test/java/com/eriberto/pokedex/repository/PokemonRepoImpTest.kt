@@ -98,7 +98,9 @@ class PokemonRepoImpTest {
 
         every { pokemonRepoImp.salvaEntidadePokemon(any()) } answers { }
 
-        runBlocking { pokemonRepo.favoritarPokemon(entidadePokemon) }
+        every { pokemonRepoImp.getEntidadePokemon(any()) } answers { entidadePokemon }
+
+        runBlocking { pokemonRepo.favoritarPokemon(entidadePokemon.id, entidadePokemon.name) }
 
         coVerify { pokemonRepoImp.salvaPokemonFavorito(any()) }
         assertThat(entidadePokemon.favorito, `is`(true))
@@ -111,8 +113,9 @@ class PokemonRepoImpTest {
 
         every { pokemonRepoImp.deletaPokemonFavorito(any()) } answers { }
         every { pokemonRepoImp.salvaEntidadePokemon(any()) } answers { }
+        every { pokemonRepoImp.getEntidadePokemon(any()) } answers { entidadePokemon }
 
-        runBlocking { pokemonRepo.desfavoritarPokemon(entidadePokemon) }
+        runBlocking { pokemonRepo.desfavoritarPokemon(entidadePokemon.id, entidadePokemon.name) }
 
         coVerify { pokemonRepoImp.deletaPokemonFavorito(any()) }
         assertThat(entidadePokemon.favorito, `is`(false))

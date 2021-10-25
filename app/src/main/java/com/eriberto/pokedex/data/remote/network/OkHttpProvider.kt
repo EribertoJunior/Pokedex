@@ -1,4 +1,4 @@
-package com.eriberto.pokedex.repository.network
+package com.eriberto.pokedex.data.remote.network
 
 import android.content.Context
 import okhttp3.Cache

@@ -1,11 +1,11 @@
-package com.eriberto.pokedex.repository.pagingSource
+package com.eriberto.pokedex.data
 
 import android.net.Uri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.eriberto.pokedex.repository.model.Pokemon
-import com.eriberto.pokedex.repository.model.RetornoPokemon
-import com.eriberto.pokedex.repository.network.PokeService
+import com.eriberto.pokedex.data.remote.network.model.Pokemon
+import com.eriberto.pokedex.data.remote.network.model.RetornoPokemon
+import com.eriberto.pokedex.data.remote.network.PokeService
 import retrofit2.HttpException
 import java.io.IOException
 import java.lang.Exception

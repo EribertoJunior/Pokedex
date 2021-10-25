@@ -1,7 +1,7 @@
-package com.eriberto.pokedex.repository.network
+package com.eriberto.pokedex.data.remote.network
 
 import android.content.Context
-import com.eriberto.pokedex.repository.network.OkHttpProvider.getOkHttpClient
+import com.eriberto.pokedex.data.remote.network.OkHttpProvider.getOkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

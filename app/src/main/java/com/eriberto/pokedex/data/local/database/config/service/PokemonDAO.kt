@@ -1,9 +1,8 @@
-package com.eriberto.pokedex.repository.database.config.service
+package com.eriberto.pokedex.data.local.database.config.service
 
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.data.local.database.model.EntidadePokemon
 
 @Dao
 interface PokemonDAO {

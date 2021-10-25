@@ -1,8 +1,8 @@
-package com.eriberto.pokedex.repository.database.config.service
+package com.eriberto.pokedex.data.local.database.config.service
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.eriberto.pokedex.repository.database.model.PokemonFavorito
+import com.eriberto.pokedex.data.local.database.model.PokemonFavorito
 
 @Dao
 interface PokemonFavoritoDAO {
@@ -13,7 +13,7 @@ interface PokemonFavoritoDAO {
     fun deletar(pokemonFavorito: PokemonFavorito)
 
     @Query("SELECT * FROM pokemon_favorito WHERE idPokemon = :idPokemon")
-    fun verificaFavorito(idPokemon: Int): LiveData<PokemonFavorito?>
+    fun buscaPokemonFavoritoPorId(idPokemon: Int): LiveData<PokemonFavorito?>
 
     @Query("SELECT * FROM pokemon_favorito WHERE idPokemon = :idPokemon")
     fun buscarFavorito(idPokemon: Int): PokemonFavorito?

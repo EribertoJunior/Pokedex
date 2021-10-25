@@ -1,10 +1,10 @@
-package com.eriberto.pokedex.repository.database.config.service
+package com.eriberto.pokedex.data.local.database.config.service
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.eriberto.pokedex.repository.database.model.ChaveRemota
+import com.eriberto.pokedex.data.local.database.model.ChaveRemota
 
 @Dao
 interface ChavesRemotasDAO {

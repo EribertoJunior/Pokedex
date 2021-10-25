@@ -1,4 +1,4 @@
-package com.eriberto.pokedex.repository.database.model
+package com.eriberto.pokedex.data.local.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,7 +1,7 @@
-package com.eriberto.pokedex.repository.network
+package com.eriberto.pokedex.data.remote.network
 
-import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
-import com.eriberto.pokedex.repository.model.RetornoPokemon
+import com.eriberto.pokedex.data.remote.network.model.RetornoPokemonDetalhe
+import com.eriberto.pokedex.data.remote.network.model.RetornoPokemon
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

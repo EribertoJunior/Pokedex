@@ -1,15 +1,15 @@
-package com.eriberto.pokedex.repository.database.config
+package com.eriberto.pokedex.data.local.database.config
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.eriberto.pokedex.repository.database.config.service.ChavesRemotasDAO
-import com.eriberto.pokedex.repository.database.config.service.PokemonDAO
-import com.eriberto.pokedex.repository.database.config.service.PokemonFavoritoDAO
-import com.eriberto.pokedex.repository.database.model.ChaveRemota
-import com.eriberto.pokedex.repository.database.model.EntidadePokemon
-import com.eriberto.pokedex.repository.database.model.PokemonFavorito
+import com.eriberto.pokedex.data.local.database.config.service.ChavesRemotasDAO
+import com.eriberto.pokedex.data.local.database.config.service.PokemonDAO
+import com.eriberto.pokedex.data.local.database.config.service.PokemonFavoritoDAO
+import com.eriberto.pokedex.data.local.database.model.ChaveRemota
+import com.eriberto.pokedex.data.local.database.model.EntidadePokemon
+import com.eriberto.pokedex.data.local.database.model.PokemonFavorito
 
 @Database(entities = [EntidadePokemon::class, ChaveRemota::class, PokemonFavorito::class], version = 1, exportSchema = false)
 abstract class PokemonDatabase : RoomDatabase(){

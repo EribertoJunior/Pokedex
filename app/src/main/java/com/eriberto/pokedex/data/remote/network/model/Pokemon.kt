@@ -1,4 +1,4 @@
-package com.eriberto.pokedex.repository.model
+package com.eriberto.pokedex.data.remote.network.model
 
 import java.io.Serializable
 

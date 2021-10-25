@@ -8,8 +8,8 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.model.Type
-import com.eriberto.pokedex.repository.model.TypeSlot
+import com.eriberto.pokedex.data.remote.network.model.Type
+import com.eriberto.pokedex.data.remote.network.model.TypeSlot
 
 class TipoPokemonAdapter : RecyclerView.Adapter<TipoPokemonAdapter.TipoPokemonViewHolder>() {
 

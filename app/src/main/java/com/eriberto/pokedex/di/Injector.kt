@@ -10,7 +10,7 @@ import org.koin.core.logger.Level
 var BASE_URL: String = ""
 
 @ExperimentalPagingApi
-fun Application.setUpDI(){
+fun Application.setUpDI() {
 
     startKoin {
         androidLogger()
@@ -21,7 +21,7 @@ fun Application.setUpDI(){
                 PROPERTY_BASE_URL to BASE_URL
             )
         )
-        modules(listOf(appModule))
+        modules(listOf(appModule, viewModels, adapters, database, remote, dataSource))
     }
 
 }

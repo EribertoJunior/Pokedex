@@ -13,8 +13,8 @@ import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.eriberto.pokedex.R
 import com.eriberto.pokedex.databinding.FragmentDetalhePokemonBinding
-import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
-import com.eriberto.pokedex.repository.network.STATUS_RESULT
+import com.eriberto.pokedex.data.remote.network.model.RetornoPokemonDetalhe
+import com.eriberto.pokedex.data.remote.network.STATUS_RESULT
 import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.viewmodel.detalhe.DetalhePokemonViewModel
 import com.eriberto.pokedex.viewmodel.detalhe.model.PokeDetalheData

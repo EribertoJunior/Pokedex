@@ -1,7 +1,7 @@
 package com.eriberto.pokedex.viewmodel.detalhe.model
 
-import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
-import com.eriberto.pokedex.repository.network.STATUS_RESULT
+import com.eriberto.pokedex.data.remote.network.model.RetornoPokemonDetalhe
+import com.eriberto.pokedex.data.remote.network.STATUS_RESULT
 
 data class PokeDetalheData(
     var retornoPokemonDetalhe: RetornoPokemonDetalhe? = null,

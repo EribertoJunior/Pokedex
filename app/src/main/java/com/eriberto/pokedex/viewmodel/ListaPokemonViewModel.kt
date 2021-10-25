@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.eriberto.pokedex.repository.PokemonRepo
-import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.data.local.database.model.EntidadePokemon
 import kotlinx.coroutines.flow.Flow
 
 class ListaPokemonViewModel(private val pokemonRepo: PokemonRepo) : ViewModel() {

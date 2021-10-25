@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eriberto.pokedex.util.GlideResquestListener
 import com.eriberto.pokedex.R
-import com.eriberto.pokedex.repository.database.model.EntidadePokemon
+import com.eriberto.pokedex.data.local.database.model.EntidadePokemon
 import com.eriberto.pokedex.view.detalhe.DetalhePokemonFragmennt.Companion.CHAVE_IMAGE_POKEMON_DETALHE
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.button.MaterialButton

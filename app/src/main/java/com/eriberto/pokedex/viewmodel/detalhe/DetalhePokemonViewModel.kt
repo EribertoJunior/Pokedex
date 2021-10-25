@@ -5,9 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eriberto.pokedex.repository.PokemonRepo
-import com.eriberto.pokedex.repository.database.model.EntidadePokemon
-import com.eriberto.pokedex.repository.database.model.PokemonFavorito
-import com.eriberto.pokedex.repository.network.STATUS_RESULT
+import com.eriberto.pokedex.data.local.database.model.PokemonFavorito
+import com.eriberto.pokedex.data.remote.network.STATUS_RESULT
 import com.eriberto.pokedex.viewmodel.detalhe.model.PokeDetalheData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

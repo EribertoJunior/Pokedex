@@ -2,10 +2,10 @@ package com.eriberto.pokedex.repository
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
-import com.eriberto.pokedex.repository.database.model.EntidadePokemon
-import com.eriberto.pokedex.repository.database.model.PokemonFavorito
-import com.eriberto.pokedex.repository.model.RetornoPokemonDetalhe
-import com.eriberto.pokedex.repository.model.Pokemon
+import com.eriberto.pokedex.data.local.database.model.EntidadePokemon
+import com.eriberto.pokedex.data.local.database.model.PokemonFavorito
+import com.eriberto.pokedex.data.remote.network.model.RetornoPokemonDetalhe
+import com.eriberto.pokedex.data.remote.network.model.Pokemon
 import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepo {

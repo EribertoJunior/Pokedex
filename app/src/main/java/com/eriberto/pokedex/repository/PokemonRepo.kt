@@ -19,7 +19,7 @@ interface PokemonRepo {
 
     suspend fun desfavoritarPokemon(idPokemon: Int, nomePokemon: String)
 
-    fun buscaPokemonFavoritoPorId(idPokemon: Int): LiveData<PokemonFavorito?>
+    fun isFavorite(idPokemon: Int): LiveData<Boolean>
 
     fun getPokemonStream(): Flow<PagingData<Pokemon>>
 

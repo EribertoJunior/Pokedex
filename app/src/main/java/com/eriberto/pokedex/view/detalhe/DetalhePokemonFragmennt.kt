@@ -89,8 +89,8 @@ class DetalhePokemonFragmennt : Fragment() {
             }
         })
 
-        viewModel.isFavorite(idPokemon).observe(this, { pokemonFavorito ->
-            if (pokemonFavorito != null) {
+        viewModel.isFavorite(idPokemon).observe(this, { isFavorite ->
+            if (isFavorite) {
                 goldenIconSet()
             } else {
                 blackIconSet()

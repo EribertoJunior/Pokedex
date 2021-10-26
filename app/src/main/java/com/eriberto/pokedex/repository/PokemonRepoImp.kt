@@ -1,26 +1,16 @@
 package com.eriberto.pokedex.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.eriberto.pokedex.data.PokemonRemoteMediator
-import com.eriberto.pokedex.data.local.database.config.service.PokemonDAO
-import com.eriberto.pokedex.data.local.database.config.service.PokemonFavoritoDAO
 import com.eriberto.pokedex.data.local.database.model.EntidadePokemon
 import com.eriberto.pokedex.data.local.database.model.PokemonFavorito
 import com.eriberto.pokedex.data.remote.network.model.Pokemon
 import com.eriberto.pokedex.data.remote.network.model.RetornoPokemonDetalhe
-import com.eriberto.pokedex.data.remote.network.PokeService
-import com.eriberto.pokedex.data.PokemonPagingSource
 import com.eriberto.pokedex.data.local.LocalDataSource
 import com.eriberto.pokedex.data.remote.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.HttpException
-import retrofit2.Response
 
 @ExperimentalPagingApi
 class PokemonRepoImp (
@@ -50,17 +40,23 @@ class PokemonRepoImp (
 
     override suspend fun desfavoritarPokemon(idPokemon: Int, nomePokemon: String) {
         val pokemonFavorito = PokemonFavorito(idPokemon = idPokemon, nomePokemon = nomePokemon)
-        localDataSource.deletaPokemonFavorito(pokemonFavorito)
-
         val entidadePokemon = localDataSource.getEntidadePokemonPorNome(nomePokemon)
+
+        localDataSource.deletaPokemonFavorito(pokemonFavorito)
         entidadePokemon?.let { pokemon ->
             pokemon.favorito = false
             localDataSource.salvaEntidadePokemon(pokemon)
         }
     }
 
-    override fun buscaPokemonFavoritoPorId(idPokemon: Int): LiveData<PokemonFavorito?> {
-        return localDataSource.buscaPokemonFavoritoPorId(idPokemon)
+    override fun isFavorite(idPokemon: Int): LiveData<Boolean> {
+        val isFavoriteLiveData = MutableLiveData<Boolean>().apply { value = false }
+        val favoritePokemonReturned = localDataSource.buscaPokemonFavoritoPorId(idPokemon)
+
+        favoritePokemonReturned.observeForever {
+            isFavoriteLiveData.value = it != null
+        }
+        return isFavoriteLiveData
     }
 
     override fun getPokemonStream(): Flow<PagingData<Pokemon>> {

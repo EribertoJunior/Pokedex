@@ -42,7 +42,6 @@ val appModule = module {
     }
 }
 
-
 @ExperimentalPagingApi
 val dataSource = module {
     single<LocalDataSource> {
@@ -52,8 +51,8 @@ val dataSource = module {
             pokemonRemoteMediator = get()
         )
     }
-    single<RemoteDataSource> { RemoteDataSourceImp(pokeService = get()) }
 
+    single<RemoteDataSource> { RemoteDataSourceImp(pokeService = get()) }
 }
 
 val remote = module {
